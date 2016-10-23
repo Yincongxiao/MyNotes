@@ -8,14 +8,18 @@
 ReactiveCocoa为我们提供了一种统一化的解决此类问题的方式,使用RAC解决问题，就不需要考虑调用顺序，直接考虑结果，把每一次操作都写成一系列嵌套的方法中，使代码高聚合，方便管理。
 reactivecocoa将所有cocoa中的事件都定义为了信号(single)，从而可以使用一些基本工具来更容易的连接、过滤和组合.
 
-RAC中涉及到的编程思想:
+###RAC中涉及到的编程思想:
 
-函数式编程（functional programming）：使用高阶函数，例如函数用其他函数作为参数。
+**函数式编程**（functional programming）：使用高阶函数，例如函数用其他函数作为参数。
 
-响应式编程（reactive programming）：关注于数据流和变化传播。
-链式编程
+**响应式编程**（reactive programming）：关注于数据流和变化传播。
 
-所以，你可能听说过reactivecocoa被描述为函数响应式编程（frp）框架。
+所以，你可能听说过reactivecocoa被描述为函数响应式编程([FRP](https://en.wikipedia.org/wiki/Functional_reactive_programming)）框架。
+
+
+**链式编程** : 
+
+
 
 RAC中信号的常用操作方式
 
