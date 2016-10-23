@@ -6,8 +6,8 @@
 > **ReactiveCocoa**为我们提供了一种统一化的解决此类问题的方式,使用RAC解决问题，就不需要考虑调用顺序，直接考虑结果，把每一次操作都写成一系列嵌套的方法中，使代码高聚合，方便管理。
 > reactivecocoa将所有cocoa中的事件都定义为了信号\(single\)，从而可以使用一些基本工具来更容易的连接、过滤和组合.
 
----
-#### RAC中涉及到的编程思想:
+
+### RAC中涉及到的编程思想:
 
 
 
@@ -23,22 +23,27 @@ _所以，你可能听说过reactivecocoa被描述为函数响应式编程\(__[F
 
 
 
-**链式编程** : 是将多个操作（多行代码）通过点号\(.\)链接在一起成为一句代码,使代码可读性好。a\(1\).b\(2\).c\(3\)
+**链式编程** : 是将多个操作（多行代码）通过点号\(.\)链接在一起成为一句代码,使代码可读性好。a\(1\).b\(2\).c\(3\),注意点:要想达到链式编程方法的返回值必须是一个((返回值是本身对象的)block),典型代表就是**masory**框架
 
 
 
 ---
 
 
-####RAC框架的结构(直接略过)
+###RAC框架的结构(直接略过)
 
 ![RAC类结构图](/assets/ReactiveCocoa v2.5.png)
 
-> 在RAC众多类中最重要的类是**RACSingle**(信号类)
+###RAC中重要的类
 
-* 它本身不具备发送信号的能力，而是交给内部一个订阅者(id<RACSubscriber>)去发出。
-* 默认一个信号都是冷信号，也就是值改变了，也不会触发，只有订阅了这个信号，这个信号才会变为热信号，值改变了才会触发
-* 所以这里着重介绍一下RACSingle的创建原理,从而理解信号的创建以及数据的传递过程
+#### RAC最重要的类是**RACSingle**(信号类)
+
+* 它本身不具备发送信号的能力，而是交给内部一个订阅者(`id <RACSubscriber>`)去发出。
+* 默认一个信号创建出来都是冷信号，即使是值改变了，也不会触发，只有订阅了这个信号，这个信号才会变为热信号，值改变了就会触发
+* RACSignal的每个操作都会返回一个RACsignal，这在术语上叫做连贯接口（fluent interface）,从而实现 `链式编程`
+
+***
+  > 所以这里着重介绍一下RACSingle的创建和订阅的实现,从而理解信号的创建以及数据的传递过程
 
 ```objc
 //这里用到一个工厂方法将子类实例返回回去
@@ -53,10 +58,77 @@ _所以，你可能听说过reactivecocoa被描述为函数响应式编程\(__[F
 }
 
 ```
+上面只是信号的创建过程,上面提到了默认信号被创建出来以后只是冷信号,也就是**didSubscribe**这个block只有当RACSingle调用
+```
+  - (RACDisposable *)subscribeNext:(void (^)(id x))nextBlock;
+```
+方法时才会被调用,也就是冷信号->热信号.那么信号是如何传递对象的呢?
+我们前面在creatSingle的时候的传递进去的didSubscribe中我们可以手动sendNest:@(传递的对象)进行对象的传递,下面我们再来看看:subscribeNext:方法的实现过程:
 
-### RAC的具体使用
+```
+- (RACDisposable *)subscribeNext:(void (^)(id x))nextBlock {
+ NSCParameterAssert(nextBlock != NULL);
+ RACSubscriber *o = [RACSubscriber subscriberWithNext:nextBlock 
+                                                error:NULL 
+                                            completed:NULL];
+ return [self subscribe:o];
 
-> RACSignal的每个操作都会返回一个RACsignal，这在术语上叫做连贯接口（fluent interface）,从而实现 `链式编程`
+}
+
+```
+这里首先创建一个RACSubscriber对象,这个是遵守了RACSubscriber协议的**RACSubscriber ***类型的对象,这个对象会将传递进来的nextBlock保存起来(也是保存成成员变量),当创建对象时候的didSubscribe中的"subscriber"调用sendNext:的时候nextBlock就会被调用! 有点绕,这里只是介绍了其中大概的工作原理,其中还有RACScheduler的参与,这里就不做介绍了..
+
+#### RACSubject类
+* *RACSubject*既是信号(继承自*RACSingle*类),又是订阅者(遵循`<RACSubscriber>`),通常使用*RACSubject*类来代替代理,其实我感觉代替通知都可以
+```
+RACSubject *subject = [RACSubject subject];
+[subject subscribeNext:^(id x) { 
+     NSLog(@"第一个订阅者%@",x); 
+}];
+[subject subscribeNext:^(id x) {
+     NSLog(@"第二个订阅者%@",x); 
+}];
+[subject sendNext:@"1"];
+```
+
+* *RACReplaySubject*:重复提供信号类，RACSubject的子类。
+
+_**RACReplaySubject与RACSubject区别**_: RACReplaySubject可以先发送信号，在订阅信号，RACSubject就不可以。如果一个信号每被订阅一次，就需要把之前的值重复发送一遍，使用重复提供信号类。
+####RAC中的集合类RACSequence
+
+**RACSequence**是RAC中的集合类,可以实现OC对象与信号中传递值之间的转换,RAC类库中提供了NSArray,NSDictionary等集合类的分类供其转换
+
+```
+//遍历数组
+NSArray *numbers = @[@1,@2,@3,@4]; 
+[numbers.rac_sequence.signal subscribeNext:^(id x) {
+     NSLog(@"%@",x);
+ }];
+
+//遍历字典
+NSDictionary *dict = @{@"name":@"qdaily",@"age":@3};
+ [dict.rac_sequence.signal subscribeNext:^(RACTuple *x) { 
+       RACTupleUnpack(NSString *key,NSString *value) = x; 
+       NSLog(@"%@ %@",key,value); 
+}];
+
+```
+**RACTupleUnpack**将RACTuple进行解包
+```
+//使用map方法可以快速进行字典转模型
+NSArray *flags = [[dictArr.rac_sequence map:^id(id value) {
+     return [FlagItem flagWithDict:value]; 
+}] array];
+```
+
+####RACCommand:RAC中用于处理事件的类
+> 可以把事件如何处理,事件中的数据如何传递，包装到这个类中，他可以很方便的监控事件的执行过程。
+
+使用场景:监听按钮点击，网络请求
+
+RACCommand简单使用
+
+
 
 #### RAC 核心方法绑定`bind`
 
