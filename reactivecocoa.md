@@ -83,10 +83,15 @@ RAC(self.titleLabel,text) = [RACObserve(self.viewModel, title);
 ```
 
 **rac_signalForSelector** : 执行某一个方法就会生成信号
+
 **rac_valuesAndChangesForKeyPath**：用于监听某个对象的属性改变。
+
 **rac_signalForControlEvents**:替代*UIControl*中的*Target*模式
+
 **rac_addObserverForName**用于监听某个通知。
+
 **RACTuplePack(...)**快速包装成元祖类,成对出现的有RACTupleUnpack(...)
+
 
 ```
  RACTuple *tuple = RACTuplePack(@"xmg",@20); 
