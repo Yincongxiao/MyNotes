@@ -6,6 +6,12 @@
 > **ReactiveCocoa**为我们提供了一种统一化的解决此类问题的方式,使用RAC解决问题，就不需要考虑调用顺序，直接考虑结果，把每一次操作都写成一系列嵌套的方法中，使代码高聚合，方便管理。
 > reactivecocoa将所有cocoa中的事件都定义为了信号\(single\)，从而可以使用一些基本工具来更容易的连接、过滤和组合.
 
+
+>参考博文:
+
+[http://www.jianshu.com/p/87ef6720a096]()
+[http://www.cocoachina.com/ios/20150123/10994.html]()
+
 ### RAC中涉及到的编程思想:
 
 **函数式编程**（functional programming）：使用高阶函数，例如函数用其他函数作为参数。
