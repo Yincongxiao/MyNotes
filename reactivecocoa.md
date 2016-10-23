@@ -9,8 +9,8 @@
 
 >参考博文:
 
-[http://www.jianshu.com/p/87ef6720a096]()
-[http://www.cocoachina.com/ios/20150123/10994.html]()
+* [http://www.jianshu.com/p/87ef6720a096]()
+* [http://www.cocoachina.com/ios/20150123/10994.html]()
 
 ### RAC中涉及到的编程思想:
 
