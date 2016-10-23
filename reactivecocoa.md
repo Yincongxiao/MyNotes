@@ -8,11 +8,19 @@
 
 ---
 
-### RAC中涉及到的编程思想:
+####RAC框架的结构
+> 在RAC众多类中最重要的类是**RACSingle**(信号类)
+
+* 它本身不具备发送信号的能力，而是交给内部一个订阅者(id<RACSubscriber>)去发出。
+* 默认一个信号都是冷信号，也就是值改变了，也不会触发，只有订阅了这个信号，这个信号才会变为热信号，值改变了才会触发
+
+![RAC类结构图](/assets/ReactiveCocoa v2.5.png)
+
+#### RAC中涉及到的编程思想:
 
 **函数式编程**（functional programming）：使用高阶函数，例如函数用其他函数作为参数。
 
-**响应式编程**（reactive programming）：关注于数据流和变化传播。
+**响应式编程**（reactive programming）：关注于数据流和变化传播。不需要考虑事件的调用过程,只需要关注数据的流入和输出.
 
 _所以，你可能听说过reactivecocoa被描述为函数响应式编程\(__[FRP](https://en.wikipedia.org/wiki/Functional_reactive_programming)__）框架。_
 
@@ -84,16 +92,21 @@ _所以，你可能听说过reactivecocoa被描述为函数响应式编程\(__[F
 ```
 
 ####flatten map: 信号的映射
-```
- [[_textField.rac_textSignal flattenMap:^RACStream *(id value) {
- // block什么时候 : 源信号发出的时候，就会调用这个block。
- // block作用 : 改变源信号的内容。
- // 返回值：绑定信号的内容.
- return [RACReturnSignal return:[NSString stringWithFormat:@"输出:%@",value]]; }]
- subscribeNext:^(id x) {
- // 订阅绑定信号，每当源信号发送内容，做完处理，就会调用这个block。 NSLog(@"%@",x); }];
+> flatten可以对传递过来的信号进行加工,会重新新建一个信号,block中的返回值是一个信号
+
 
 ```
+ [[_textField.rac_textSignal flattenMap:^RACStream *(id value) {
+     return [RACReturnSignal return:[NSString stringWithFormat:@"输出:%@",value]]; }]
+              subscribeNext:^(id x) {
+}];
+
+```
+flattenMap 和 Map 方法的区别:
+* flattenMap方法中的block返回只是信号,所以是对信号的加工
+* Map 方法中的block的返回值是对象,是对信号传递的变量的加工
+* 一般如果传递的是对象,使用map,信号传递的是信号就用flattenMap
+
 
 #### Reduc聚合: 将多个信号发出的值进行聚合
 
