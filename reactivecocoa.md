@@ -7,26 +7,52 @@
 > reactivecocoa将所有cocoa中的事件都定义为了信号\(single\)，从而可以使用一些基本工具来更容易的连接、过滤和组合.
 
 ---
+#### RAC中涉及到的编程思想:
 
-####RAC框架的结构
+
+
+**函数式编程**（functional programming）：使用高阶函数，例如函数用其他函数作为参数。
+
+
+
+**响应式编程**（reactive programming）：关注于数据流和变化传播。不需要考虑事件的调用过程,只需要关注数据的流入和输出.
+
+
+
+_所以，你可能听说过reactivecocoa被描述为函数响应式编程\(__[FRP](https://en.wikipedia.org/wiki/Functional_reactive_programming)__）框架。_
+
+
+
+**链式编程** : 是将多个操作（多行代码）通过点号\(.\)链接在一起成为一句代码,使代码可读性好。a\(1\).b\(2\).c\(3\)
+
+
+
+---
+
+
+####RAC框架的结构(直接略过)
+
+![RAC类结构图](/assets/ReactiveCocoa v2.5.png)
+
 > 在RAC众多类中最重要的类是**RACSingle**(信号类)
 
 * 它本身不具备发送信号的能力，而是交给内部一个订阅者(id<RACSubscriber>)去发出。
 * 默认一个信号都是冷信号，也就是值改变了，也不会触发，只有订阅了这个信号，这个信号才会变为热信号，值改变了才会触发
+* 所以这里着重介绍一下RACSingle的创建原理,从而理解信号的创建以及数据的传递过程
 
-![RAC类结构图](/assets/ReactiveCocoa v2.5.png)
+```objc
+//这里用到一个工厂方法将子类实例返回回去
++ (RACSignal *)createSignal:(RACDisposable * (^)(id<RACSubscriber> subscriber))didSubscribe {
+ return [RACDynamicSignal createSignal:didSubscribe];
+}
+//我们再来看看子类`RACDynamicSignal`中的具体实现,其实就是吧传递过来的didSubscribe这个block保存起来
++ (RACSignal *)createSignal:(RACDisposable * (^)(id<RACSubscriber> subscriber))didSubscribe {
+ RACDynamicSignal *signal = [[self alloc] init];
+ signal->_didSubscribe = [didSubscribe copy];
+ return [signal setNameWithFormat:@"+createSignal:"];
+}
 
-#### RAC中涉及到的编程思想:
-
-**函数式编程**（functional programming）：使用高阶函数，例如函数用其他函数作为参数。
-
-**响应式编程**（reactive programming）：关注于数据流和变化传播。不需要考虑事件的调用过程,只需要关注数据的流入和输出.
-
-_所以，你可能听说过reactivecocoa被描述为函数响应式编程\(__[FRP](https://en.wikipedia.org/wiki/Functional_reactive_programming)__）框架。_
-
-**链式编程** : 是将多个操作（多行代码）通过点号\(.\)链接在一起成为一句代码,使代码可读性好。a\(1\).b\(2\).c\(3\)
-
----
+```
 
 ### RAC的具体使用
 
