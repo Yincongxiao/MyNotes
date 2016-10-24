@@ -289,7 +289,7 @@ RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> s
 [_textField.rac_textSignal subscribeNext:^(id x) { NSLog(@"输出:%@",x); }];
 
 ```
-
+###过滤信号的操作
 #### fliter : 过滤信号
 
 > 通过返回**bool**的方式控制信号的传递方式
