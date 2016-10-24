@@ -5,12 +5,14 @@
 * 在 **iOS** 编程中我们需要处理各种事件,例如响应按钮的点击,监听键盘的输入,监听网络回包等...我们通常使用`Cocoa`推荐的例如`target-action`、`delegate`、`key-value observing`、`callback`等。
 * **ReactiveCocoa**为我们提供了一种统一化的解决此类问题的方式,使用RAC解决问题，就不需要考虑调用顺序，直接考虑结果，把每一次操作都写成一系列嵌套的方法中，使代码高聚合，方便管理。
 * **ReactiveCocoa**将所有`Cocoa`中的事件都定义为了信号\(single\)，从而可以使用一些基本工具来更容易的连接、过滤和组合.
-> 
-> 参考博文:
 
- [http:\/\/www.jianshu.com\/p\/87ef6720a096]()
+> &emsp  参考博文:
 
- [http:\/\/www.cocoachina.com\/ios\/20150123\/10994.html]()
+> &emsp [MVVM+RAC英文教程](:https://www.raywenderlich.com/74106/mvvm-tutorial-with-reactivecocoa-part-1)
+
+> &emsp [http:\/\/www.jianshu.com\/p\/87ef6720a096]()
+
+> &emsp [http:\/\/www.cocoachina.com\/ios\/20150123\/10994.html]()
 
 ### RAC中涉及到的编程思想:
 
@@ -21,7 +23,7 @@
 > _所以，你可能听说过reactivecocoa被描述为函数响应式编程\(_[****_FRP_****](https://en.wikipedia.org/wiki/Functional_reactive_programming)_）框架。
 其他平台上也有类似的框架例如java的**RXJava** swift中的**ReactiveSwif**_
 
-* **链式编程** : 是将多个操作（多行代码）通过点号\(.\)链接在一起成为一句代码,使代码可读性好。a\(1\).b\(2\).c\(3\),注意点:要想达到链式编程方法的返回值必须是一个\(\(返回值是本身对象的\)block\),典型代表就是**masory**框架
+* **链式编程** : 是将多个操作（多行代码）通过点号\(.\)链接在一起成为一句代码,使代码可读性好。a\(1\).b\(2\).c\(3\),注意点:要想达到链式编程方法的返回值必须是一个\( \(*返回值是本身对象的*\)`block`\),典型代表就是[**Masonry**](https://github.com/SnapKit/Masonry)框架
 
 ---
 
