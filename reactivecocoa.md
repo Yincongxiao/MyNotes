@@ -2,9 +2,9 @@
 
 ### 前言
 
-* 在 **iOS** 编程中我们需要处理各种事件,例如响应按钮的点击,监听键盘的输入,监听网络回包等...我们通常使用cocoa推荐的例如target-action、delegate、key-value observing、callback等。
+* 在 **iOS** 编程中我们需要处理各种事件,例如响应按钮的点击,监听键盘的输入,监听网络回包等...我们通常使用`Cocoa`推荐的例如`target-action`、`delegate`、`key-value observing`、`callback`等。
 * **ReactiveCocoa**为我们提供了一种统一化的解决此类问题的方式,使用RAC解决问题，就不需要考虑调用顺序，直接考虑结果，把每一次操作都写成一系列嵌套的方法中，使代码高聚合，方便管理。
-* reactivecocoa将所有cocoa中的事件都定义为了信号\(single\)，从而可以使用一些基本工具来更容易的连接、过滤和组合.
+* reactivecocoa将所有`Cocoa`中的事件都定义为了信号\(single\)，从而可以使用一些基本工具来更容易的连接、过滤和组合.
 > 
 > 参考博文:
 
