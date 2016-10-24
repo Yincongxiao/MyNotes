@@ -316,13 +316,22 @@ RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> s
 > 当上一次的值和当前的值有明显的变化就会发出信号, 在开发中，刷新UI经常使用，只有两次数据不一样才需要刷新,提高性能,减少不必要的操作
 ```
 [[_textField.rac_textSignal distinctUntilChanged] subscribeNext:^(id x) {
-
    NSLog(@"%@",x);
 }];
 ```
-文／袁峥Seemygo（简书作者）
-原文链接：http://www.jianshu.com/p/e10e5ca413b7
-著作权归作者所有，转载请联系作者获得授权，并标注“简书作者”。
+####take
+> 从信号发出的值中取前n个
+```
+RACSubject *signal = [RACSubject subject]; 
+
+[[signal take:1] subscribeNext:^(id x) {
+     NSLog(@"%@",x); 
+}];
+
+[signal sendNext:@1]; 
+[signal sendNext:@2];
+
+```
 
 #### Map:
 >\(映射\) map能够"加工信号传递的值”
