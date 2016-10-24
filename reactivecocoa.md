@@ -306,14 +306,17 @@ RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> s
 ```
 ####ignore:
 > 忽略某些信号的值
+
 ```
 // 内部调用filter过滤，忽略掉ignore的值 [[_textField.rac_textSignal ignore:@"1"]     
     subscribeNext:^(id x) {
          NSLog(@"%@",x); 
 }];
 ```
+
 ####distinctUntilChanged:
 > 当上一次的值和当前的值有明显的变化就会发出信号, 在开发中，刷新UI经常使用，只有两次数据不一样才需要刷新,提高性能,减少不必要的操作
+
 ```
 [[_textField.rac_textSignal distinctUntilChanged] subscribeNext:^(id x) {
    NSLog(@"%@",x);
@@ -331,6 +334,19 @@ RACSubject *signal = [RACSubject subject];
 [signal sendNext:@1]; 
 [signal sendNext:@2];
 
+```
+####takeLast:
+> 取最后N次的信号,前提条件，由于是从信号的后面取,所以订阅者必须调用完成，因为只有完成，就知道总共有多少信号.
+
+```
+RACSubject *signal = [RACSubject subject];
+[[signal takeLast:1] subscribeNext:^(id x) 
+   NSLog(@"%@",x);
+}];
+[signal sendNext:@1];
+[signal sendNext:@2];
+//必须有下一步!
+[signal sendCompleted];
 ```
 
 #### Map:
