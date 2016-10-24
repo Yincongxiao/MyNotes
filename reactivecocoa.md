@@ -483,3 +483,59 @@ RACSignal *reduceSignal = [RACSignal combineLatest:@[signalA,signalB] reduce:^id
 
 ####subscribeOn:
 > 内容传递和副作用都会切换到指定线程中。
+
+### ReactiveCocoa操作方法之**时间控制**。 
+
+####timeout：
+> 超时，可以让一个信号在一定的时间后，自动报错。
+ 
+```
+RACSignal *signal = [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+     return nil; 
+}] timeout:1 onScheduler:[RACScheduler currentScheduler]];
+
+[signal subscribeNext:^(id x) {
+     NSLog(@"%@",x); 
+} error:^(NSError *error) { 
+    // 1秒后会自动调用
+     NSLog(@"%@",error); 
+}];
+```
+
+####interval
+> 定时：每隔一段时间发出信号
+
+```
+[[RACSignal interval:1 onScheduler:[RACScheduler currentScheduler]] subscribeNext:^(id x) {
+     NSLog(@"%@",x);
+ }];
+```
+
+####delay
+> 延迟发送next。
+
+```
+ RACSignal *signal = [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) { 
+    [subscriber sendNext:@1]; 
+    return nil;
+ }] delay:2] subscribeNext:^(id x) { 
+    NSLog(@"%@",x);
+ }];
+```
+
+### ReactiveCocoa操作方法之重复。
+
+####retry
+> 重试 ：只要失败，就会重新执行创建信号中的block,直到成功.
+
+####throttle
+> 节流:当某个信号发送比较频繁时，可以使用节流，在某一段时间不发送信号内容，过了一段时间获取信号的最新内容发出。
+
+```
+ RACSubject *signal = [RACSubject subject]; 
+ _signal = signal; 
+    // 节流，在一定时间（1秒）内，不接收任何信号内容，过了这个时间（1秒）获取最后发送的信号内容发出。
+ [[signal throttle:1] subscribeNext:^(id x) {             
+        NSLog(@"%@",x); 
+}];
+```
