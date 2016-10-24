@@ -290,7 +290,7 @@ RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> s
 
 ```
 ###过滤信号的操作
-#### fliter : 过滤信号
+#### fliter : 过滤信号(条件过滤)
 
 > 通过返回**bool**的方式控制信号的传递方式
 > 本例中要实现当用户名长度大于3的时候输出log
@@ -304,6 +304,15 @@ RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> s
         NSLog(@"%@", x);
   }];
 ```
+####ignore:
+> 忽略某些信号的值
+```
+// 内部调用filter过滤，忽略掉ignore的值 [[_textField.rac_textSignal ignore:@"1"]     
+    subscribeNext:^(id x) {
+         NSLog(@"%@",x); 
+}];
+```
+
 
 #### Map:\(映射\) map能够"加工信号传递的值”
 
