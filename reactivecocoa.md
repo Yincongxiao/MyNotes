@@ -324,16 +324,14 @@ RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> s
 ```
 ####take
 > 从信号发出的值中取前n个
+
 ```
 RACSubject *signal = [RACSubject subject]; 
-
 [[signal take:1] subscribeNext:^(id x) {
      NSLog(@"%@",x); 
 }];
-
 [signal sendNext:@1]; 
 [signal sendNext:@2];
-
 ```
 ####takeLast:
 > 取最后N次的信号,前提条件，由于是从信号的后面取,所以订阅者必须调用完成，因为只有完成，就知道总共有多少信号.
@@ -347,6 +345,42 @@ RACSubject *signal = [RACSubject subject];
 [signal sendNext:@2];
 //必须有下一步!
 [signal sendCompleted];
+```
+
+####takeUntil:(RACSignal *):
+
+> 获取信号直到某个信号执行完成
+
+```
+[_textField.rac_textSignal 
+    takeUntil:self.rac_willDeallocSignal];
+```
+
+####skip:(NSUInteger):
+> 跳过几个信号,不接受。
+
+```
+// 表示输入第一次，不会被监听到，跳过第一次发出的信号
+[[_textField.rac_textSignal skip:1] subscribeNext:^(id x) {
+       NSLog(@"%@",x);
+}];
+```
+
+####switchToLatest:
+> 用于signalOfSignals（信号的信号），有时候信号也会发出信号，会在signalOfSignals中，获取signalOfSignals发送的最新信号。
+
+```
+RACSubject *signalOfSignals = [RACSubject subject];
+RACSubject *signal = [RACSubject subject];
+
+// 获取信号中信号最近发出信号，订阅最近发出的信号。
+// 注意switchToLatest：只能用于信号中的信号
+[signalOfSignals.switchToLatest subscribeNext:^(id x) {
+
+   NSLog(@"%@",x);
+}];
+[signalOfSignals sendNext:signal];
+[signal sendNext:@1];
 ```
 
 #### Map:
@@ -422,4 +456,30 @@ RACSignal *reduceSignal = [RACSignal combineLatest:@[signalA,signalB] reduce:^id
    NSLog(@"%@",x);
 }];
 ```
+###ReactiveCocoa操作方法之秩序(控制流操作)。
+#### doNext:
+> 执行Next之前，会先执行这个Block 
 
+#### doCompleted:
+> 执行sendCompleted之前，会先执行这个Block
+
+```
+[[[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) { 
+    [subscriber sendNext:@1];
+     [subscriber sendCompleted]; 
+    return nil;
+ }] doNext:^(id x) { 
+    // 执行[subscriber sendNext:@1];之前会调用这个Block         
+    NSLog(@"doNext");; 
+}] doCompleted:^{
+ // 执行[subscriber sendCompleted];之前会调用这个Block 
+    NSLog(@"doCompleted");; }] subscribeNext:^(id x) {     
+    NSLog(@"%@",x);
+ }];
+```
+###ReactiveCocoa中的线程操作
+####deliverOn:
+>  内容传递切换到指定线程中，副作用在原来线程中,把在创建信号时block中的代码称之为副作用。
+
+####subscribeOn:
+> 内容传递和副作用都会切换到指定线程中。
