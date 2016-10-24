@@ -120,6 +120,7 @@ RAC(self.titleLabel,text) = [RACObserve(self.viewModel, title);
 // 使用注意：updateUIWithR1::中的参数和信号所传递过来的数据一一对应
  [self rac_liftSelector:@selector(updateUIWithR1:r2:) withSignalsFromArray:@[request1,request2]];
 ```
+
 #### RACSubject类
 
 * _RACSubject_既是信号\(继承自_RACSingle_类\),又是订阅者\(遵循`<RACSubscriber>`\),通常使用_RACSubject_类来代替代理,其实我感觉代替通知都可以
