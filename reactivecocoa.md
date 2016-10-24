@@ -312,9 +312,20 @@ RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> s
          NSLog(@"%@",x); 
 }];
 ```
+####distinctUntilChanged:
+> 当上一次的值和当前的值有明显的变化就会发出信号, 在开发中，刷新UI经常使用，只有两次数据不一样才需要刷新,提高性能,减少不必要的操作
+```
+[[_textField.rac_textSignal distinctUntilChanged] subscribeNext:^(id x) {
 
+   NSLog(@"%@",x);
+}];
+```
+文／袁峥Seemygo（简书作者）
+原文链接：http://www.jianshu.com/p/e10e5ca413b7
+著作权归作者所有，转载请联系作者获得授权，并标注“简书作者”。
 
-#### Map:\(映射\) map能够"加工信号传递的值”
+#### Map:
+>\(映射\) map能够"加工信号传递的值”
 
 > 这里的加工信号指的是将上一个next事件传递过来的信号值x进行**加工**或者**转换**成任意的OC对象,通过block返回值返回回去,这个例子中就是将用户名加工成NSNumber值返回回去,所以下一个next事件接收到的值就是NSNumber对象.
 
