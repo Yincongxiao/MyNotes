@@ -2,25 +2,25 @@
 
 ### 前言
 
-> 在 **iOS** 编程中我们需要处理各种事件,例如响应按钮的点击,监听键盘的输入,监听网络回包等...我们通常使用cocoa推荐的例如action、delegate、kvo、callback等。
-> **ReactiveCocoa**为我们提供了一种统一化的解决此类问题的方式,使用RAC解决问题，就不需要考虑调用顺序，直接考虑结果，把每一次操作都写成一系列嵌套的方法中，使代码高聚合，方便管理。
-> reactivecocoa将所有cocoa中的事件都定义为了信号\(single\)，从而可以使用一些基本工具来更容易的连接、过滤和组合.
+* 在 **iOS** 编程中我们需要处理各种事件,例如响应按钮的点击,监听键盘的输入,监听网络回包等...我们通常使用cocoa推荐的例如action、delegate、kvo、callback等。
+* **ReactiveCocoa**为我们提供了一种统一化的解决此类问题的方式,使用RAC解决问题，就不需要考虑调用顺序，直接考虑结果，把每一次操作都写成一系列嵌套的方法中，使代码高聚合，方便管理。
+* reactivecocoa将所有cocoa中的事件都定义为了信号\(single\)，从而可以使用一些基本工具来更容易的连接、过滤和组合.
+> 
+> 参考博文:
 
-
->参考博文:
-
-* [http://www.jianshu.com/p/87ef6720a096]()
-* [http://www.cocoachina.com/ios/20150123/10994.html]()
+* [http:\/\/www.jianshu.com\/p\/87ef6720a096]()
+* [http:\/\/www.cocoachina.com\/ios\/20150123\/10994.html]()
 
 ### RAC中涉及到的编程思想:
 
-**函数式编程**（functional programming）：使用高阶函数，例如函数用其他函数作为参数。
+* **函数式编程**（functional programming）：使用高阶函数，例如函数用其他函数作为参数。
 
-**响应式编程**（reactive programming）：关注于数据流和变化传播。不需要考虑事件的调用过程,只需要关注数据的流入和输出.
+* **响应式编程**（reactive programming）：关注于数据流和变化传播。不需要考虑事件的调用过程,只需要关注数据的流入和输出.
 
-_所以，你可能听说过reactivecocoa被描述为函数响应式编程\(_[**_FRP_**](https://en.wikipedia.org/wiki/Functional_reactive_programming)_）框架。_
+> _所以，你可能听说过reactivecocoa被描述为函数响应式编程\(_[****_FRP_****](https://en.wikipedia.org/wiki/Functional_reactive_programming)_）框架。
+其他平台上也有类似的框架例如java的**RXJava** swift中的**ReactiveSwif**_
 
-**链式编程** : 是将多个操作（多行代码）通过点号\(.\)链接在一起成为一句代码,使代码可读性好。a\(1\).b\(2\).c\(3\),注意点:要想达到链式编程方法的返回值必须是一个\(\(返回值是本身对象的\)block\),典型代表就是**masory**框架
+* **链式编程** : 是将多个操作（多行代码）通过点号\(.\)链接在一起成为一句代码,使代码可读性好。a\(1\).b\(2\).c\(3\),注意点:要想达到链式编程方法的返回值必须是一个\(\(返回值是本身对象的\)block\),典型代表就是**masory**框架
 
 ---
 
@@ -77,49 +77,52 @@ _所以，你可能听说过reactivecocoa被描述为函数响应式编程\(_[**
 
 这里首先创建一个RACSubscriber对象,这个是遵守了RACSubscriber协议的**RACSubscriber \***类型的对象,这个对象会将传递进来的nextBlock保存起来\(也是保存成成员变量\),当创建对象时候的didSubscribe中的"subscriber"调用sendNext:的时候nextBlock就会被调用! 有点绕,这里只是介绍了其中大概的工作原理,其中还有RACScheduler的参与,这里就不做介绍了..
 
-####RAC为cocoa中的很多类通过分类的形式快速生成信号以及常见的宏使用:
+#### RAC为cocoa中的很多类通过分类的形式快速生成信号以及常见的宏使用:
 
-**@weakify(self) & @strongify(self)**: _Weak & Strong dance_
+**@weakify\(self\) & @strongify\(self\)**: _Weak & Strong dance_
 
-**RACObserve(TARGET, KEYPATH) & RAC(TARGET, ...)** :这对宏简直是绝配类似**KVC**的用法,能够快速地实现对象属性的映射
+**RACObserve\(TARGET, KEYPATH\) & RAC\(TARGET, ...\)** :这对宏简直是绝配类似**KVC**的用法,能够快速地实现对象属性的映射
+
 ```
 //e.g.
 RAC(self.titleLabel,text) = [RACObserve(self.viewModel, title);
 
 ```
 
-**rac_signalForSelector** : 执行某一个方法就会生成信号
+**rac\_signalForSelector** : 执行某一个方法就会生成信号
 
-**rac_valuesAndChangesForKeyPath**：用于监听某个对象的属性改变。
+**rac\_valuesAndChangesForKeyPath**：用于监听某个对象的属性改变。
 
-**rac_signalForControlEvents**:替代*UIControl*中的*Target*模式
+**rac\_signalForControlEvents**:替代_UIControl_中的_Target_模式
 
-**rac_addObserverForName**用于监听某个通知。
+**rac\_addObserverForName**用于监听某个通知。
 
-**RACTuplePack(...)**快速包装成元祖类,成对出现的有RACTupleUnpack(...)
-
+**RACTuplePack\(...\)**快速包装成元祖类,成对出现的有RACTupleUnpack\(...\)
 
 ```
  RACTuple *tuple = RACTuplePack(@"xmg",@20); 
  RACTupleUnpack(NSString *name,NSNumber *age) = tuple;
 
 ```
-**rac_liftSelector:withSignalsFromArray:Signals:**
+
+**rac\_liftSelector:withSignalsFromArray:Signals:**
+
 > 应用场景: 当界面有多个请求的时候,当所有的请求都回包时才出发某个操作
-```
- RACSignal *request1 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-     // 发送请求1 ,并且获取到数据以后:
-    [subscriber sendNext:@"发送请求1"];
-     return nil; 
-}];
- RACSignal *request2 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-     // 发送请求2 ,并且获取到数据以后:
-    [subscriber sendNext:@"发送请求2"];
-     return nil; 
-}]; 
-// 使用注意：updateUIWithR1::中的参数和信号所传递过来的数据一一对应
- [self rac_liftSelector:@selector(updateUIWithR1:r2:) withSignalsFromArray:@[request1,request2]];
-```
+> 
+> ```
+>  RACSignal *request1 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+>      // 发送请求1 ,并且获取到数据以后:
+>     [subscriber sendNext:@"发送请求1"];
+>      return nil; 
+> }];
+>  RACSignal *request2 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+>      // 发送请求2 ,并且获取到数据以后:
+>     [subscriber sendNext:@"发送请求2"];
+>      return nil; 
+> }]; 
+> // 使用注意：updateUIWithR1::中的参数和信号所传递过来的数据一一对应
+>  [self rac_liftSelector:@selector(updateUIWithR1:r2:) withSignalsFromArray:@[request1,request2]];
+> ```
 
 #### RACSubject类
 
@@ -175,16 +178,15 @@ NSArray *flags = [[dictArr.rac_sequence map:^id(id value) {
 > 可以理解为命令类,是对信号和事件的封装
 
 使用场景:监听按钮点击，网络请求
-*RACCommand*使用注意点:
+_RACCommand_使用注意点:
 
 1. signalBlock必须要返回一个信号，不能传nil. 
-2. 如果不想要传递信号，直接创建空的信号[RACSignal empty]; 
-3. RACCommand中信号如果数据传递完，必须调用[subscriber sendCompleted]，这时命令才会执行完毕，否则永远处于执行中。 
+2. 如果不想要传递信号，直接创建空的信号\[RACSignal empty\]; 
+3. RACCommand中信号如果数据传递完，必须调用\[subscriber sendCompleted\]，这时命令才会执行完毕，否则永远处于执行中。 
 4. RACCommand需要被强引用，否则接收不到RACCommand中的信号，因此RACCommand中的信号是延迟发送的。
 
-
-
 RACCommand简单使用
+
 ```
  RACCommand *requestCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
      NSLog(@"请求数据ing..."); 
@@ -207,6 +209,7 @@ RACCommand简单使用
  }];
 
 ```
+
 ```
 // RACCommand高级用法 
 // switchToLatest:用于signal of signals，获取signal of signals发出的最新信号,也就是可以直接拿到RACCommand中的信号 [command.executionSignals.switchToLatest subscribeNext:^(id x) {                          
@@ -223,48 +226,55 @@ RACCommand简单使用
  }];
 
 ```
-####RACMuticastConnection
+
+#### RACMuticastConnection
 
 > RACMulticastConnection:用于当一个信号，被多次订阅时，为了保证创建信号时，避免多次调用创建信号中的block，造成副作用，可以使用这个类处理。
 
 * 普通的订阅信号过程:
-```
- RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+
+  ```
+  RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
      NSLog(@"发送请求");
      return nil;
- }];
- // 第一次订阅信号 
-[signal subscribeNext:^(id x) {
+  }];
+  // 第一次订阅信号 
+  [signal subscribeNext:^(id x) {
      NSLog(@"接收数据"); 
-}]; 
-//  第二次订阅信号 
-[signal subscribeNext:^(id x) {
+  }]; 
+  //  第二次订阅信号 
+  [signal subscribeNext:^(id x) {
      NSLog(@"接收数据");
- }]; 
-// 3.运行结果:打印两次@"发送请求"，也就是每次订阅都会发送一次请求
-```
+  }]; 
+  // 3.运行结果:打印两次@"发送请求"，也就是每次订阅都会发送一次请求
+  ```
+
 * RACMulticastConnection:解决重复请求问题
-```
-RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+
+  ```
+  RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
      NSLog(@"发送请求"); 
     [subscriber sendNext:@1];
          return nil; 
     }]; 
 
- RACMulticastConnection *connect = [signal publish];
+  RACMulticastConnection *connect = [signal publish];
 
- // 注意：订阅信号，也不能激活信号，只是保存订阅者到数组，必须通过连接,当调用连接，就会一次性调用所有订阅者的sendNext: 
-[connect.signal subscribeNext:^(id x) { 
+  // 注意：订阅信号，也不能激活信号，只是保存订阅者到数组，必须通过连接,当调用连接，就会一次性调用所有订阅者的sendNext: 
+  [connect.signal subscribeNext:^(id x) { 
     NSLog(@"订阅者一信号");
- }];
- [connect.signal subscribeNext:^(id x) {
+  }];
+  [connect.signal subscribeNext:^(id x) {
      NSLog(@"订阅者二信号"); 
-}]; 
-[connect connect];
-//运行结果:只会打印一次@"发送请求"
-```
-###RAC中信号处理的常用方法
-#### RAC 核心方法绑定`bind`
+  }]; 
+  [connect connect];
+  //运行结果:只会打印一次@"发送请求"
+  ```
+
+  ### RAC中信号处理的常用方法
+
+  #### RAC 核心方法绑定`bind`
+
 
 对比之前的开发方式是赋值，而用RAC开发，应该把重心放在绑定，也就是在创建一个对象的时候，就绑定好以后想要做的事情，而不是等赋值之后在去做事情。
 列如：把数据展示到控件上，之前都是重写控件的setModel方法，用RAC就可以在一开始创建控件的时候，就绑定好数据。
@@ -290,8 +300,10 @@ RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> s
 [_textField.rac_textSignal subscribeNext:^(id x) { NSLog(@"输出:%@",x); }];
 
 ```
-###过滤信号的操作
-#### fliter : 过滤信号(条件过滤)
+
+### 过滤信号的操作
+
+#### fliter : 过滤信号\(条件过滤\)
 
 > 通过返回**bool**的方式控制信号的传递方式
 > 本例中要实现当用户名长度大于3的时候输出log
@@ -305,7 +317,9 @@ RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> s
         NSLog(@"%@", x);
   }];
 ```
-####ignore:
+
+#### ignore:
+
 > 忽略某些信号的值
 
 ```
@@ -315,7 +329,8 @@ RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> s
 }];
 ```
 
-####distinctUntilChanged:
+#### distinctUntilChanged:
+
 > 当上一次的值和当前的值有明显的变化就会发出信号, 在开发中，刷新UI经常使用，只有两次数据不一样才需要刷新,提高性能,减少不必要的操作
 
 ```
@@ -323,7 +338,9 @@ RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> s
    NSLog(@"%@",x);
 }];
 ```
-####take
+
+#### take
+
 > 从信号发出的值中取前n个
 
 ```
@@ -334,7 +351,9 @@ RACSubject *signal = [RACSubject subject];
 [signal sendNext:@1]; 
 [signal sendNext:@2];
 ```
-####takeLast:
+
+#### takeLast:
+
 > 取最后N次的信号,前提条件，由于是从信号的后面取,所以订阅者必须调用完成，因为只有完成，就知道总共有多少信号.
 
 ```
@@ -348,7 +367,7 @@ RACSubject *signal = [RACSubject subject];
 [signal sendCompleted];
 ```
 
-####takeUntil:(RACSignal *):
+#### takeUntil:\(RACSignal \*\):
 
 > 获取信号直到某个信号执行完成
 
@@ -357,7 +376,8 @@ RACSubject *signal = [RACSubject subject];
     takeUntil:self.rac_willDeallocSignal];
 ```
 
-####skip:(NSUInteger):
+#### skip:\(NSUInteger\):
+
 > 跳过几个信号,不接受。
 
 ```
@@ -367,7 +387,8 @@ RACSubject *signal = [RACSubject subject];
 }];
 ```
 
-####switchToLatest:
+#### switchToLatest:
+
 > 用于signalOfSignals（信号的信号），有时候信号也会发出信号，会在signalOfSignals中，获取signalOfSignals发送的最新信号。
 
 ```
@@ -385,8 +406,9 @@ RACSubject *signal = [RACSubject subject];
 ```
 
 #### Map:
->\(映射\) map能够"加工信号传递的值”
 
+> \(映射\) map能够"加工信号传递的值”
+> 
 > 这里的加工信号指的是将上一个next事件传递过来的信号值x进行**加工**或者**转换**成任意的OC对象,通过block返回值返回回去,这个例子中就是将用户名加工成NSNumber值返回回去,所以下一个next事件接收到的值就是NSNumber对象.
 
 ```objc
@@ -457,11 +479,15 @@ RACSignal *reduceSignal = [RACSignal combineLatest:@[signalA,signalB] reduce:^id
    NSLog(@"%@",x);
 }];
 ```
-###ReactiveCocoa操作方法之秩序(控制流操作)。
+
+### ReactiveCocoa操作方法之秩序\(控制流操作\)。
+
 #### doNext:
-> 执行Next之前，会先执行这个Block 
+
+> 执行Next之前，会先执行这个Block
 
 #### doCompleted:
+
 > 执行sendCompleted之前，会先执行这个Block
 
 ```
@@ -478,18 +504,23 @@ RACSignal *reduceSignal = [RACSignal combineLatest:@[signalA,signalB] reduce:^id
     NSLog(@"%@",x);
  }];
 ```
-###ReactiveCocoa中的线程操作
-####deliverOn:
->  内容传递切换到指定线程中，副作用在原来线程中,把在创建信号时block中的代码称之为副作用。
 
-####subscribeOn:
+### ReactiveCocoa中的线程操作
+
+#### deliverOn:
+
+> 内容传递切换到指定线程中，副作用在原来线程中,把在创建信号时block中的代码称之为副作用。
+
+#### subscribeOn:
+
 > 内容传递和副作用都会切换到指定线程中。
 
-### ReactiveCocoa操作方法之**时间控制**。 
+### ReactiveCocoa操作方法之**时间控制**。
 
-####timeout：
+#### timeout：
+
 > 超时，可以让一个信号在一定的时间后，自动报错。
- 
+
 ```
 RACSignal *signal = [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
      return nil; 
@@ -503,7 +534,8 @@ RACSignal *signal = [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> 
 }];
 ```
 
-####interval
+#### interval
+
 > 定时：每隔一段时间发出信号
 
 ```
@@ -512,7 +544,8 @@ RACSignal *signal = [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> 
  }];
 ```
 
-####delay
+#### delay
+
 > 延迟发送next。
 
 ```
@@ -526,10 +559,12 @@ RACSignal *signal = [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> 
 
 ### ReactiveCocoa操作方法之重复。
 
-####retry
+#### retry
+
 > 重试 ：只要失败，就会重新执行创建信号中的block,直到成功.
 
-####throttle
+#### throttle
+
 > 节流:当某个信号发送比较频繁时，可以使用节流，在某一段时间不发送信号内容，过了一段时间获取信号的最新内容发出。
 
 ```
@@ -540,3 +575,4 @@ RACSignal *signal = [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> 
         NSLog(@"%@",x); 
 }];
 ```
+
