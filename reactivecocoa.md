@@ -64,8 +64,7 @@
   - (RACDisposable *)subscribeNext:(void (^)(id x))nextBlock;
 ```
 
-方法时才会被调用,也就是冷信号-&gt;热信号.那么信号是如何传递对象的呢?
-我们前面在creatSingle的时候的传递进去的didSubscribe中我们可以手动sendNest:@\(传递的对象\)进行对象的传递,下面我们再来看看:subscribeNext:方法的实现过程:
+下面我们再来看看:subscribeNext:方法的实现过程:
 
 ```
 - (RACDisposable *)subscribeNext:(void (^)(id x))nextBlock {
