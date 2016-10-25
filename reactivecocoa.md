@@ -58,7 +58,7 @@
 ```
 
 上面只是信号的创建过程,上面提到了默认信号被创建出来以后只是冷信号,也就是**didSubscribe**这个block只有当RACSingle调用,这里的subscriber有三种方法,也可以理解为可以发送三种信号分别为:**next**、**error**、**completed**,
-其中`sendNext()`是发送我们需要传递的对象,`sendError`,和`sendComplete`都会中断信号的订阅.不同的是`sendError`会传递一个错误值error
+其中`sendNext()`是发送我们需要传递的对象,`sendError`,和`sendComplete`都会中断信号的订阅.不同的是`sendError`会传递一个错误值`error`.一个`signal`在因`error`终止或者`sendComplete`前，可以发送任意数量的`next`事件
 
 ```
   - (RACDisposable *)subscribeNext:(void (^)(id x))nextBlock;
