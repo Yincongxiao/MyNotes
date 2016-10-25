@@ -16,9 +16,9 @@
 
 ### RAC中涉及到的编程思想:
 
-* **函数式编程**（functional programming）：使用高阶函数，例如函数用其他函数作为参数。
+* **函数式编程**（[functional programming](https://en.wikipedia.org/wiki/Functional_programming)）：使用高阶函数，例如函数用其他函数作为参数。
 
-* **响应式编程**（reactive programming）：关注于数据流和变化传播。不需要考虑事件的调用过程,只需要关注数据的流入和输出.
+* **响应式编程**（[reactive programming](https://en.wikipedia.org/wiki/Reactive_programming)）：关注于数据流和变化传播。不需要考虑事件的调用过程,只需要关注数据的流入和输出.
 
 > _所以，你可能听说过reactivecocoa被描述为函数响应式编程\(_[****_FRP_****](https://en.wikipedia.org/wiki/Functional_reactive_programming)_）框架。
 其他平台上也有类似的框架例如java的**RXJava** swift中的**ReactiveSwif**_
