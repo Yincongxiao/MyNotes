@@ -429,6 +429,16 @@ RACSubject *signal = [RACSubject subject];
   subscribeNext:^(id x){
     NSLog(@"%@", x):
   }];
+
+//test2
+[[validPasswordSignal
+map:^id(NSNumber *passwordValid){
+    return[passwordValid boolValue] ? [UIColor clearColor]:[UIColor yellowColor];
+}]
+subscribeNext:^(UIColor *color){
+    self.passwordTextField.backgroundColor = color;
+}];
+
 ```
 
 #### flatten map: 信号的映射
