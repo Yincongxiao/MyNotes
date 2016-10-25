@@ -467,7 +467,7 @@ flattenMap 和 Map 方法的区别:
 + (RACSignal *)combineLatest:(id<NSFastEnumeration>)signals reduce:(id (^)())reduceBlock;
 ```
 
-将信号进行聚合,在reduceBlock中将信号传递的值进行整合.这个方法会创建一个新的信号携带整合好的值返回
+将多个信号进行聚合,在`reduceBlock`中将信号传递的`值`进行整合.这个方法会创建一个新的信号携带整合好的值返回,常见应用场景就是登录界面是否满足登录条件从而控制登录按钮的状态
 
 ```
 
