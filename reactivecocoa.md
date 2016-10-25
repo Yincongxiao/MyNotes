@@ -445,7 +445,7 @@ RACSubject *signal = [RACSubject subject];
 
 flattenMap 和 Map 方法的区别:
 
-* flattenMap方法中的block返回只是信号,所以是对信号的加工
+* flattenMap方法中的block返回值是信号,所以是对信号的加工
 * Map 方法中的block的返回值是对象,是对信号传递的变量的加工
 * 一般如果传递的是对象,使用map,信号传递的是信号就用flattenMap
 
