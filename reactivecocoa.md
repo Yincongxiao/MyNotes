@@ -459,9 +459,10 @@ flattenMap 和 Map 方法的区别:
 * Map 方法中的block的返回值是对象,是对信号传递的变量的加工
 * 一般如果传递的是对象,使用map,信号传递的是信号就用flattenMap
 
-#### Reduc聚合: 将多个信号发出的值进行聚合
+#### Reduce
+> 聚合: 将多个信号发出的值进行聚合
 
-常用用法:常使用
+常用用法:通常使用
 
 ```
 + (RACSignal *)combineLatest:(id<NSFastEnumeration>)signals reduce:(id (^)())reduceBlock;
