@@ -28,9 +28,7 @@
 ---
 
 ### RAC框架的结构\(直接略过\)
-
-![RAC类结构图](/assets/ReactiveCocoa v2.5.png)
-
+![](http://blog.leichunfeng.com/images/ReactiveCocoa%20v2.5.png)
 ### RAC中重要的类
 
 #### RAC最重要的类是**RACSingle**\(信号类\)
