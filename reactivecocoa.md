@@ -1,18 +1,18 @@
 # ReactiveCocoa
 
-### 前言
+#### 前言
 
 * 在 **iOS** 编程中我们需要处理各种事件,例如响应按钮的点击,监听键盘的输入,监听网络回包等...我们通常使用`Cocoa`推荐的例如`target-action`、`delegate`、`key-value observing`、`callback`等。
 * **ReactiveCocoa**为我们提供了一种统一化的解决此类问题的方式,使用RAC解决问题，就不需要考虑调用顺序，直接考虑结果，把每一次操作都写成一系列嵌套的方法中，使代码高聚合，方便管理。
 * **ReactiveCocoa**将所有`Cocoa`中的事件都定义为了信号\(single\)，从而可以使用一些基本工具来更容易的连接、过滤和组合.
 
-> &emsp  参考博文:
-
-> &emsp [MVVM+RAC英文教程](:https://www.raywenderlich.com/74106/mvvm-tutorial-with-reactivecocoa-part-1)
-
-> &emsp [http:\/\/www.jianshu.com\/p\/87ef6720a096]()
-
-> &emsp [http:\/\/www.cocoachina.com\/ios\/20150123\/10994.html]()
+> 参考博文:
+> 
+> [MVVM+RAC英文教程](:https://www.raywenderlich.com/74106/mvvm-tutorial-with-reactivecocoa-part-1)
+> 
+> [http:\/\/www.jianshu.com\/p\/87ef6720a096]()
+> 
+> [http:\/\/www.cocoachina.com\/ios\/20150123\/10994.html]()
 
 ### RAC中涉及到的编程思想:
 
@@ -20,15 +20,18 @@
 
 * **响应式编程**（[reactive programming](https://en.wikipedia.org/wiki/Reactive_programming)）：关注于数据流和变化传播。不需要考虑事件的调用过程,只需要关注数据的流入和输出.
 
-> _所以，你可能听说过reactivecocoa被描述为函数响应式编程\(_[****_FRP_****](https://en.wikipedia.org/wiki/Functional_reactive_programming)_）框架。
-其他平台上也有类似的框架例如java的**RXJava** swift中的**ReactiveSwif**_
 
-* **链式编程** : 是将多个操作（多行代码）通过点号\(.\)链接在一起成为一句代码,使代码可读性好。a\(1\).b\(2\).c\(3\),注意点:要想达到链式编程方法的返回值必须是一个\( \(*返回值是本身对象的*\)`block`\),典型代表就是[**Masonry**](https://github.com/SnapKit/Masonry)框架
+> _所以，你可能听说过reactivecocoa被描述为函数响应式编程\(_[******_FRP_******](https://en.wikipedia.org/wiki/Functional_reactive_programming)_）框架。
+> 其他平台上也有类似的框架例如java的__**RXJava**__ swift中的__**ReactiveSwif**_
+
+* **链式编程** : 是将多个操作（多行代码）通过点号\(.\)链接在一起成为一句代码,使代码可读性好。a\(1\).b\(2\).c\(3\),注意点:要想达到链式编程方法的返回值必须是一个\( \(_返回值是本身对象的_\)`block`\),典型代表就是[**Masonry**](https://github.com/SnapKit/Masonry)框架
 
 ---
 
 ### RAC框架的结构\(直接略过\)
+
 ![](http://blog.leichunfeng.com/images/ReactiveCocoa%20v2.5.png)
+
 ### RAC中重要的类
 
 #### RAC最重要的类是**RACSingle**\(信号类\)
@@ -54,6 +57,7 @@
 }
 
 ```
+
 方法的参数`didSubscribe`这个block 可以理解为是对信号的描述,
 上面只是信号的创建过程,上面提到了默认信号被创建出来以后只是冷信号,也就是**didSubscribe**这个block只有当RACSingle调用subscribeNext:方法是才会调用,方法里的subscriber有三种方法,也可以理解为可以发送三种信号分别为:**next**、**error**、**completed**,
 其中`sendNext()`是发送我们需要传递的对象,`sendError`,和`sendComplete`都会中断信号的订阅.不同的是`sendError`会传递一个错误值`error`.一个`signal`在因`error`终止或者`sendComplete`前，可以发送任意数量的`next`事件
@@ -306,12 +310,12 @@ RACCommand简单使用
 
 #### fliter : 过滤信号\(条件过滤\)
 
->*  通过返回**bool**的方式控制是否接受信号传递过来的值(控制是否调用`subscribeNext`这个block)
->*  fliter会将接受的信号通过返回的条件进行筛选,并且生成新的信号供订阅者订阅.
->*  从fliter的使用中可以看出`RAC`中对信号的操作都会生成新的信号,以便达到链式编程的目的
->*  从这点建议在对信号的操作的代码书写规范:每一次操作都应该折行,这样阅读起来更加清晰
+> * 通过返回**bool**的方式控制是否接受信号传递过来的值\(控制是否调用`subscribeNext`这个block\)
+> * fliter会将接受的信号通过返回的条件进行筛选,并且生成新的信号供订阅者订阅.
+> * 从fliter的使用中可以看出`RAC`中对信号的操作都会生成新的信号,以便达到链式编程的目的
+> * 从这点建议在对信号的操作的代码书写规范:每一次操作都应该折行,这样阅读起来更加清晰
 
- 本例中要实现当用户名长度大于3的时候输出log
+本例中要实现当用户名长度大于3的时候输出log
 
 ```objc
 [[self.usernameTextField.rac_textSignal
@@ -458,6 +462,7 @@ flattenMap 和 Map 方法的区别:
 * 一般如果传递的是对象,使用map,信号传递的是信号就用flattenMap
 
 #### Reduce
+
 > 聚合: 将多个信号发出的值进行聚合
 
 常用用法:通常使用
@@ -467,6 +472,7 @@ flattenMap 和 Map 方法的区别:
 ```
 
 将多个信号进行聚合,在`reduceBlock`中将信号传递的`值`进行整合.这个方法会创建一个新的信号携带整合好的值返回,每次这两个源信号的任何一个产生新值时，reduce block都会执行，block的返回值会发给下一个信号。常见应用场景就是登录界面是否满足登录条件从而控制登录按钮的状态
+
 > 注意这个方法中的reduceBlock: 这个block是一个返回值为id类型的,也就是说我们将需要聚合的信号携带的值进行加工组合以后一定要返回一个新的对象,combineLatest::这个方法返回的信号会携带这个新对象! 我们再注意看`reduceBlock`中的参数,参数个数是不确定的,他们和信号中携带的值一一对应,为了实现这个功能RAC中专门有个`RACBlockTrampoline`类来处理这个逻辑
 
 ```
