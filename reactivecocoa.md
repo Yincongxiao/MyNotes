@@ -1,6 +1,6 @@
 # ReactiveCocoa
 
-### 前言
+###### 前言
 
 * 在 **iOS** 编程中我们需要处理各种事件,例如响应按钮的点击,监听键盘的输入,监听网络回包等...我们通常使用`Cocoa`推荐的例如`target-action`、`delegate`、`key-value observing`、`callback`等。
 * **ReactiveCocoa**为我们提供了一种统一化的解决此类问题的方式,使用RAC解决问题，就不需要考虑调用顺序，直接考虑结果，把每一次操作都写成一系列嵌套的方法中，使代码高聚合，方便管理。
@@ -21,10 +21,10 @@
 * **响应式编程**（[reactive programming](https://en.wikipedia.org/wiki/Reactive_programming)）：关注于数据流和变化传播。不需要考虑事件的调用过程,只需要关注数据的流入和输出.
 
 
-> _所以，你可能听说过reactivecocoa被描述为函数响应式编程\(_[******_FRP_******](https://en.wikipedia.org/wiki/Functional_reactive_programming)_）框架。
-> 其他平台上也有类似的框架例如java的__**RXJava**__ swift中的__**ReactiveSwif**_
+> _所以，你可能听说过reactivecocoa被描述为函数响应式编程\(_**[\*\*](https://en.wikipedia.org/wiki/Functional_reactive_programming)**_[FRP](https://en.wikipedia.org/wiki/Functional_reactive_programming)_**[\*\*](https://en.wikipedia.org/wiki/Functional_reactive_programming)**_）框架。
+> 其他平台上也有类似的框架例如java的_****_RXJava_****_ swift中的\_\__**_ReactiveSwif_**
 
-* **链式编程** : 是将多个操作（多行代码）通过点号\(.\)链接在一起成为一句代码,使代码可读性好。a\(1\).b\(2\).c\(3\),注意点:要想达到链式编程方法的返回值必须是一个\( \(_返回值是本身对象的_\)`block`\),典型代表就是[**Masonry**](https://github.com/SnapKit/Masonry)框架
+* **链式编程** : 是将多个操作（多行代码）通过点号\(.\)链接在一起成为一句代码,使代码可读性好。a\(1\).b\(2\).c\(3\),注意点:要想达到链式编程方法的返回值必须是一个\( \(_返回值是本身对象的_\)`block`\),典型代表就是**[Masonry](https://github.com/SnapKit/Masonry)**框架
 
 ---
 
@@ -147,7 +147,7 @@ RAC(self.titleLabel,text) = [RACObserve(self.viewModel, title);
 * _RACReplaySubject_:重复提供信号类，RACSubject的子类。
 
 
-**_RACReplaySubject与RACSubject区别_**: RACReplaySubject可以先发送信号，在订阅信号，RACSubject就不可以。如果一个信号每被订阅一次，就需要把之前的值重复发送一遍，使用重复提供信号类。
+_**RACReplaySubject与RACSubject区别**_: RACReplaySubject可以先发送信号，在订阅信号，RACSubject就不可以。如果一个信号每被订阅一次，就需要把之前的值重复发送一遍，使用重复提供信号类。
 
 #### RAC中的集合类RACSequence
 
