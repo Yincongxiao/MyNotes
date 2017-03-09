@@ -77,8 +77,8 @@ pthread_mutex_unlock(&_lock)
 //清除队列
 - (void)removeAll
 ```
-* 以上是YYMemoryCache中两个重要的类,在每次给memoryCache发送`setObject:forkey:`或者`objectForKey:`消息的时候都会更新``_YYLinkedMapNode
-其中每一个方法的实现都有值得学习的地方,例如默认支持异步移除内存空间,
+* 以上是YYMemoryCache中两个重要的类,在每次给memoryCache发送`setObject:forkey:`或者`objectForKey:`消息的时候都会更新对应的linkedMapNode对象的时间戳属性,并且把该对象放到队列的最前面,从而调整了缓存中对象的顺序.
+####异步释放对象
 
 ```objc
      if (_releaseAsynchronously) {
