@@ -1,4 +1,6 @@
 ##YYCache  tips
+> 之前YYKit刚开源的时候就粗略读过源码,当时真的是震惊,最近工作不忙,想细细读一遍,每次读作者的源码,膝盖都没有直起来过 - -~.
+异步
 * 介绍:略过,直接去[github](https://github.com/ibireme/YYCache)中看详细的介绍和使用方法,本文主要写自己在学习过程中的收货总结
 * iOS中为了防止多线程对资源的抢夺,所有开发时使用锁来保证线程的安全,在[这篇文章](http://blog.ibireme.com/author/ibireme/)中作者详细介绍了iOS中几种锁的性能对比,在YYCache中采用的是pthread_mutex.
 
@@ -75,7 +77,7 @@ if (_lru->_totalCount > _countLimit) {
             dispatch_queue_t queue = _lru->_releaseOnMainThread ? dispatch_get_main_queue() : YYMemoryCacheGetReleaseQueue();
             //node并不会马上释放,因为被block捕获了
             dispatch_async(queue, ^{
-            //在这里可以实现在指定的线程中释放对象?
+            //在这里可以实现在异步线程中释放对象?
                 [node class]; //hold and release in queue
             });
         } else if (_lru->_releaseOnMainThread && !pthread_main_np()) {
