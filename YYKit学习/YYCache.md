@@ -66,13 +66,14 @@ pthread_mutex_unlock(&_lock)
         }
 ```
 
-* 有一个对象的释放操作不太理解,记录一下
+* 有一个对象的释放操作不太理解,记录一下.   我暂时的理解是利用了block能够捕获外部变量,导致当执行到`dispatch_async(queue, ^{`虽然node已经被置为nil了,但是node对象并不会被马上释放(被block所捕获),等到切换到相应线程中以后对这个node对象发消息,编译器发现这个node已经被置空了,  才会马上释放该对象.
 
 ```objc
 if (_lru->_totalCount > _countLimit) {
         _YYLinkedMapNode *node = [_lru removeTailNode];
         if (_lru->_releaseAsynchronously) {
             dispatch_queue_t queue = _lru->_releaseOnMainThread ? dispatch_get_main_queue() : YYMemoryCacheGetReleaseQueue();
+            //node并不会马上释放,因为被block捕获了
             dispatch_async(queue, ^{
             //在这里可以实现在指定的线程中释放对象?
                 [node class]; //hold and release in queue
