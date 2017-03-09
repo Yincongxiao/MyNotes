@@ -40,3 +40,38 @@
 //清除队列
 - (void)removeAll
 ```
+其中每一个方法的实现都有值得学习的地方,例如默认支持异步移除内存空间,
+
+```objc
+     if (_releaseAsynchronously) {
+            dispatch_queue_t queue = _releaseOnMainThread ? dispatch_get_main_queue() : YYMemoryCacheGetReleaseQueue();
+            dispatch_async(queue, ^{
+                CFRelease(holder); // hold and release in specified queue
+            });
+        } else if (_releaseOnMainThread && !pthread_main_np()) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                CFRelease(holder); // hold and release in specified queue
+            });
+        } else {
+            CFRelease(holder);
+        }
+```
+
+* 有一个对象的释放操作不太理解
+
+```objc
+if (_lru->_totalCount > _countLimit) {
+        _YYLinkedMapNode *node = [_lru removeTailNode];
+        if (_lru->_releaseAsynchronously) {
+            dispatch_queue_t queue = _lru->_releaseOnMainThread ? dispatch_get_main_queue() : YYMemoryCacheGetReleaseQueue();
+            dispatch_async(queue, ^{
+            //在这里可以实现在指定的线程中释放对象?
+                [node class]; //hold and release in queue
+            });
+        } else if (_lru->_releaseOnMainThread && !pthread_main_np()) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [node class]; //hold and release in queue
+            });
+        }
+    }
+```
