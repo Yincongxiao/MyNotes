@@ -59,7 +59,7 @@ pthread_mutex_unlock(&_lock)
 
 ##### \_YYLinkedMap
 
-* \_YYLinkedMap是实现lru的关键,是\(\_YYLinkedMapNode \*\)的集合,通过记录集合内每个node对象的前后关系实现一个堆栈,本质是使用了CFMutableDictionaryRef来进行对象的存储,这个集合管理了对象的出栈,入栈以及排序,相关的方法依次有
+* \_YYLinkedMap是实现lru的关键,它是\(\_YYLinkedMapNode \*\)的集合,通过记录集合内每个node对象的前后关系实现一个堆栈,本质是使用了CFMutableDictionaryRef来进行对象的存储,这个集合管理了对象的出栈,入栈以及排序,相关的方法依次有
 
 ```objc
 // 将一个node对象插到队列最前面
@@ -77,7 +77,7 @@ pthread_mutex_unlock(&_lock)
 //清除队列
 - (void)removeAll
 ```
-
+* 以上是YYMemoryCache中两个重要的类,在每次给memoryCache发送`setObject:forkey:`或者`objectForKey:`消息的时候都会更新``_YYLinkedMapNode
 其中每一个方法的实现都有值得学习的地方,例如默认支持异步移除内存空间,
 
 ```objc
