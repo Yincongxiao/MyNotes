@@ -106,4 +106,42 @@ if (_lru->_totalCount > _countLimit) {
     }
 ```
 
+###缓存上限的控制
+* 在内存缓存中作者采用了轮询的方式来控制内存缓存中缓存上限,缓存个数以及过期时间,默认轮训时间是5秒,并且次轮训操作放到异步线程中,采用低优先级以获取较高的性能
+* 作者定义了三个方法`- _trimToCost:`,`-_trimToCount:`,`-_trimToAge:`来分别限制最大缓存字节数,对象个数,缓存时间,我们拿其中一个来看其中的知识点
 
+```objc
+- (void)_trimToCost:(NSUInteger)costLimit {
+    BOOL finish = NO;
+    pthread_mutex_lock(&_lock);
+    if (costLimit == 0) {
+        [_lru removeAll];
+        finish = YES;
+    } else if (_lru->_totalCost <= costLimit) {
+        finish = YES;
+    }
+    pthread_mutex_unlock(&_lock);
+    if (finish) return;
+    
+    NSMutableArray *holder = [NSMutableArray new];
+    while (!finish) {
+        if (pthread_mutex_trylock(&_lock) == 0) {
+            if (_lru->_totalCost > costLimit) {
+                _YYLinkedMapNode *node = [_lru removeTailNode];
+                if (node) [holder addObject:node];
+            } else {
+                finish = YES;
+            }
+            pthread_mutex_unlock(&_lock);
+        } else {
+            usleep(10 * 1000); //10 ms
+        }
+    }
+    if (holder.count) {
+        dispatch_queue_t queue = _lru->_releaseOnMainThread ? dispatch_get_main_queue() : YYMemoryCacheGetReleaseQueue();
+        dispatch_async(queue, ^{
+            [holder count]; // release in queue
+        });
+    }
+}
+```
