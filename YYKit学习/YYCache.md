@@ -86,7 +86,7 @@ pthread_mutex_unlock(&_lock)
 ```
 
 ###内存缓存对象释放控制
-* 有一个对象的释放操作不太理解,记录一下.   我暂时的理解是利用了block能够捕获外部变量,导致当执行到`dispatch_async(queue, ^{`虽然node已经被置为nil了,但是node对象并不会被马上释放(被block所捕获),等到切换到相应线程中以后对这个node对象发消息,编译器发现这个node已经被置空了,  才会马上释放该对象.
+* 我们知道对象的创建需要分配内存空间,大量的创建对象会比较消耗性能,同样大量的对象的释放操作也是比较消耗性能的,所以在YYMemeryCache中提供了可以异步,并且选择子线程进行对象的释放的选项,这里释放操作比较巧妙我不是很理解,记录一下.   我暂时的理解是利用了block能够捕获外部变量,导致当执行到`dispatch_async(queue, ^{`虽然node已经被置为nil了,但是node对象并不会被马上释放(被block所捕获),等到切换到相应线程中以后对这个node对象发消息,编译器发现这个node已经被置空了,  才会马上释放该对象.
 
 ```objc
 if (_lru->_totalCount > _countLimit) {
@@ -107,7 +107,7 @@ if (_lru->_totalCount > _countLimit) {
 ```
 
 ###缓存上限的控制
-* 在内存缓存中作者采用了轮询的方式来控制内存缓存中缓存上限,缓存个数以及过期时间,默认轮训时间是5秒,并且次轮训操作放到异步线程中,采用低优先级以获取较高的性能
+* 在内存缓存中作者采用了轮询的方式来控制内存缓存中缓存上限,缓存个数以及过期时间,默认轮询时间是5秒,并且次轮训操作放到异步线程中,采用低优先级以获取较高的性能
 * 作者定义了三个方法`- _trimToCost:`,`-_trimToCount:`,`-_trimToAge:`来分别限制最大缓存字节数,对象个数,缓存时间,我们拿其中一个来看其中的知识点
 
 ```objc
@@ -125,6 +125,11 @@ if (_lru->_totalCount > _countLimit) {
     
     NSMutableArray *holder = [NSMutableArray new];
     while (!finish) {
+    
+    //pthread_mutex_trylock函数是pthread_mutex_lock函数的非阻塞版本,也可以用来加锁
+    与pthread_mutex_lock的区别是:trylock如果没有获取到锁就会立刻返回不会阻塞当前线程,获取锁成功会返回0,否则返回其他值来说明锁的状态.
+    但是lock如果没有获取到锁会一直等待从而发生阻塞.
+    
         if (pthread_mutex_trylock(&_lock) == 0) {
             if (_lru->_totalCost > costLimit) {
                 _YYLinkedMapNode *node = [_lru removeTailNode];
@@ -134,9 +139,12 @@ if (_lru->_totalCount > _countLimit) {
             }
             pthread_mutex_unlock(&_lock);
         } else {
+        //获取锁失败将当前线程挂起10ms
             usleep(10 * 1000); //10 ms
         }
     }
+    //这里holder虽然是临时变量,超过函数{}范围后以后会被释放掉.
+    //这里同样是利用了block的捕获变量能力来达到后台线程释放对象.
     if (holder.count) {
         dispatch_queue_t queue = _lru->_releaseOnMainThread ? dispatch_get_main_queue() : YYMemoryCacheGetReleaseQueue();
         dispatch_async(queue, ^{
