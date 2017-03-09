@@ -15,6 +15,9 @@
     
 * 去[github](https://github.com/ibireme/YYCache)中看详细的介绍和使用方法,本文主要写自己在学习过程中的收货总结
 
+##YYMemoryCache
+![YYMemoryCache](/assets/YYMemeryCache.pdf)
+
 ###锁
 * iOS中为了防止多线程对资源的抢夺,所有开发时使用锁来保证线程的安全,在[这篇文章](http://blog.ibireme.com/author/ibireme/)中作者详细介绍了iOS中几种锁的性能对比
 
