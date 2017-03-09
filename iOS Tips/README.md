@@ -1,0 +1,2 @@
+####记录iOS学习中的一些容易忘记但是很重要的tips,以备以后不定期的查阅.
+* NSMutiableString在作为属性时使用strong修饰.NSString使用copy修饰,NSMutiableString如果使用copy会发生错误,应为执行set方法会使得ms这个成员变量指向一个不可变对象.
