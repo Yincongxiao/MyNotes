@@ -22,4 +22,21 @@
 ```
 也就是这个对象中拥有了一个被存储对象全部的信息,key,值,以及在linkMap中的location,location的实现是通过持有前一个对象的指针以及后一个对象的指针来实现的
 #####_YYLinkedMap
-* _YYLinkedMap是实现lru的关键,是(_YYLinkedMapNode *)的集合,这个集合管理了对象的出栈,入栈以及排序,相关的方法依次有
+* _YYLinkedMap是实现lru的关键,是(_YYLinkedMapNode *)的集合,通过记录集合内每个node对象的前后关系实现一个堆栈,本质是使用了CFMutableDictionaryRef来进行对象的存储,这个集合管理了对象的出栈,入栈以及排序,相关的方法依次有
+
+```objc
+// 将一个node对象插到队列最前面
+- (void)insertNodeAtHead:(_YYLinkedMapNode *)node;
+
+// 将一个node放到队列最前面
+- (void)bringNodeToHead:(_YYLinkedMapNode *)node;
+
+//移除掉指定node
+- (void)removeNode:(_YYLinkedMapNode *)node;
+
+//将最后一个个node移除
+- (_YYLinkedMapNode *)removeTailNode;
+
+//清除队列
+- (void)removeAll
+```
