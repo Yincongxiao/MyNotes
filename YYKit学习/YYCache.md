@@ -40,7 +40,8 @@ pthread_mutex_unlock(&_lock)
 ### LRU淘汰算法
 
 * **当LRU**的实现:_It uses LRU \(least-recently-used\) to remove objects; NSCache's eviction method_,在YYMemeryCache中使用了lru规则来进行缓存的淘汰,当发生内存警告或者缓存值达到上限,会优先淘汰哪些时间戳靠前的对象,最近使用的不被淘汰.YYMemoryCache中两个重要的内部对象`_YYLinkedMap`,`_YYLinkedMapNode`
-  ##### \_YYLinkedMapNode
+
+##### \_YYLinkedMapNode
 * \_YYLinkedMapNode 是缓存系统中的最小单元,直接被`_YYLinkedMap`所持有,先来看看这个类的声明
 
 ```objc
