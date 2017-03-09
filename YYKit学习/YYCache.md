@@ -23,7 +23,7 @@
 
 ### 锁
 
-* iOS中为了防止多线程对资源的抢夺,所有开发时使用锁来保证线程的安全,在[这篇文章](http://blog.ibireme.com/author/ibireme/)中作者详细介绍了iOS中几种锁的性能对比
+* iOS中为了防止多线程对资源的抢夺,所有开发时使用锁来保证线程的安全,在[这篇文章](http://blog.ibireme.com/author/ibireme/)中作者详细介绍了iOS中几种锁的性能对比以及安全性的讨论
 
   ![iOS中的锁](http://blog.ibireme.com/wp-content/uploads/2016/01/lock_benchmark.png)  
   在YYCache中采用的是pthread\_mutex.
@@ -42,7 +42,7 @@ pthread_mutex_unlock(&_lock)
 * **当LRU**的实现:_It uses LRU \(least-recently-used\) to remove objects; NSCache's eviction method_,在YYMemeryCache中使用了lru规则来进行缓存的淘汰,当发生内存警告或者缓存值达到上限,会优先淘汰哪些时间戳靠前的对象,最近使用的不被淘汰.YYMemoryCache中两个重要的内部对象`_YYLinkedMap`,`_YYLinkedMapNode`
 
 ##### \_YYLinkedMapNode
-* \_YYLinkedMapNode 是缓存系统中的最小单元,直接被`_YYLinkedMap`所持有,先来看看这个类的声明
+* \_YYLinkedMapNode 是缓存系统中的最小单元,是对被存储对象的一层包装,直接被`_YYLinkedMap`所持有,先来看看这个类的声明
 
 ```objc
 @interface _YYLinkedMapNode : NSObject {
@@ -79,7 +79,8 @@ pthread_mutex_unlock(&_lock)
 - (void)removeAll
 ```
 * 以上是YYMemoryCache中两个重要的类,在每次给memoryCache发送`setObject:forkey:`或者`objectForKey:`消息的时候都会更新对应的linkedMapNode对象的时间戳属性,并且把该对象放到队列的最前面,从而调整了缓存中对象的顺序.
-####异步释放对象
+
+### 内存缓存对象释放控制
 
 ```objc
      if (_releaseAsynchronously) {
@@ -96,7 +97,7 @@ pthread_mutex_unlock(&_lock)
         }
 ```
 
-### 内存缓存对象释放控制
+
 
 * 我们知道对象的创建需要分配内存空间,大量的创建对象会比较消耗性能,同样大量的对象的释放操作也是比较消耗性能的,所以在YYMemeryCache中提供了可以异步,并且选择子线程进行对象的释放的选项,这里释放操作比较巧妙我不是很理解,记录一下.   我暂时的理解是利用了block能够捕获外部变量,导致当执行到`dispatch_async(queue, ^{`虽然node已经被置为nil了,但是node对象并不会被马上释放\(被block所捕获\),等到切换到相应线程中以后对这个node对象发消息,编译器发现这个node已经被置空了,  才会马上释放该对象.
 
@@ -167,6 +168,8 @@ if (_lru->_totalCount > _countLimit) {
     }
 }
 ```
+
+* 以上就是YYMemoryCache中的关键技术点和实现思路,从中学习到很多有用的知识,例如对象的释放选择性的放到子线程中,iru淘汰算法的实现,类之间的设计思路以及作者严谨的代码风格.
 
 
 
