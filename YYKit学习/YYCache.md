@@ -23,15 +23,6 @@
 也就是这个对象中拥有了一个被存储对象全部的信息,key,值,以及在linkMap中的location,location的实现是通过持有前一个对象的指针以及后一个对象的指针来实现的
 #####_YYLinkedMap
 * _YYLinkedMap是实现lru的关键,是(_YYLinkedMapNode *)的集合,这个集合管理了对象的出栈,入栈以及排序,相关的方法依次有
-
-```objc
-//
-- (void)insertNodeAtHead:(_YYLinkedMapNode *)node;
-
-/// Bring a inner node to header.
-/// Node should already inside the dic.
-- (void)bringNodeToHead:(_YYLinkedMapNode *)node;
-
 /// Remove a inner node and update the total cost.
 /// Node should already inside the dic.
 - (void)removeNode:(_YYLinkedMapNode *)node;
