@@ -130,6 +130,7 @@ if (_lru->_totalCount > _countLimit) {
     与pthread_mutex_lock的区别是:trylock如果没有获取到锁就会立刻返回不会阻塞当前线程,获取锁成功会返回0,否则返回其他值来说明锁的状态.
     但是lock如果没有获取到锁会一直等待从而发生阻塞.
     
+    //获取锁成功后加锁
         if (pthread_mutex_trylock(&_lock) == 0) {
             if (_lru->_totalCost > costLimit) {
                 _YYLinkedMapNode *node = [_lru removeTailNode];
