@@ -27,7 +27,7 @@
 pthread_mutex_init(&_lock, NULL);
 //在锁中操作对象
 pthread_mutex_lock(&_lock);
-// do something...
+// do something safely...
 pthread_mutex_unlock(&_lock)
 ```
 
