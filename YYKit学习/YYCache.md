@@ -2,6 +2,15 @@
 * 介绍:略过,直接去[github](https://github.com/ibireme/YYCache)中看详细的介绍和使用方法,本文主要写自己在学习过程中的收货总结
 * iOS中为了防止多线程对资源的抢夺,所有开发时使用锁来保证线程的安全,在[这篇文章](http://blog.ibireme.com/author/ibireme/)中作者详细介绍了iOS中几种锁的性能对比,在YYCache中采用的是pthread_mutex.
 
+```objc
+//创建一个`pthread_mutex`锁
+pthread_mutex_init(&_lock, NULL);
+//在锁中操作对象
+pthread_mutex_lock(&_lock);
+// do something...
+pthread_mutex_unlock(&_lock)
+```
+
  ![iOS中的锁](http://blog.ibireme.com/wp-content/uploads/2016/01/lock_benchmark.png)
  
  ####LRU淘汰算法
@@ -57,7 +66,7 @@
         }
 ```
 
-* 有一个对象的释放操作不太理解
+* 有一个对象的释放操作不太理解,记录一下
 
 ```objc
 if (_lru->_totalCount > _countLimit) {
@@ -75,3 +84,5 @@ if (_lru->_totalCount > _countLimit) {
         }
     }
 ```
+
+
