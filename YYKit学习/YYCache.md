@@ -13,8 +13,14 @@
     * 存储类型控制: 磁盘缓存支持对每个对象的存储类型 (SQLite/文件) 进行自动或手动控制，以获得更高的存取性能
     
     
-* 介绍:略过,直接去[github](https://github.com/ibireme/YYCache)中看详细的介绍和使用方法,本文主要写自己在学习过程中的收货总结
-* iOS中为了防止多线程对资源的抢夺,所有开发时使用锁来保证线程的安全,在[这篇文章](http://blog.ibireme.com/author/ibireme/)中作者详细介绍了iOS中几种锁的性能对比,在YYCache中采用的是pthread_mutex.
+* 去[github](https://github.com/ibireme/YYCache)中看详细的介绍和使用方法,本文主要写自己在学习过程中的收货总结
+
+###锁
+* iOS中为了防止多线程对资源的抢夺,所有开发时使用锁来保证线程的安全,在[这篇文章](http://blog.ibireme.com/author/ibireme/)中作者详细介绍了iOS中几种锁的性能对比
+
+ ![iOS中的锁](http://blog.ibireme.com/wp-content/uploads/2016/01/lock_benchmark.png)
+ 在YYCache中采用的是pthread_mutex.
+
 
 ```objc
 //创建一个`pthread_mutex`锁
@@ -25,9 +31,8 @@ pthread_mutex_lock(&_lock);
 pthread_mutex_unlock(&_lock)
 ```
 
- ![iOS中的锁](http://blog.ibireme.com/wp-content/uploads/2016/01/lock_benchmark.png)
- 
- ####LRU淘汰算法
+
+ ###LRU淘汰算法
 * **当LRU**的实现:*It uses LRU (least-recently-used) to remove objects; NSCache's eviction method*,在YYMemeryCache中使用了lru规则来进行缓存的淘汰,当发生内存警告或者缓存值达到上限,会优先淘汰哪些时间戳靠前的对象,最近使用的不被淘汰.YYMemoryCache中两个重要的内部对象`_YYLinkedMap`,`_YYLinkedMapNode`
 #####_YYLinkedMapNode
 * _YYLinkedMapNode 是缓存系统中的最小单元,直接被`_YYLinkedMap`所持有,先来看看这个类的声明
@@ -80,6 +85,7 @@ pthread_mutex_unlock(&_lock)
         }
 ```
 
+###内存缓存对象释放控制
 * 有一个对象的释放操作不太理解,记录一下.   我暂时的理解是利用了block能够捕获外部变量,导致当执行到`dispatch_async(queue, ^{`虽然node已经被置为nil了,但是node对象并不会被马上释放(被block所捕获),等到切换到相应线程中以后对这个node对象发消息,编译器发现这个node已经被置空了,  才会马上释放该对象.
 
 ```objc
