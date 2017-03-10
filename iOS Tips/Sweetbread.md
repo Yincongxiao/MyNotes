@@ -15,3 +15,4 @@ NSMutableArray *ma = [NSMutableArray array];
     NSNumber *ageM = [ma valueForKeyPath:@"@max.age"];
     //@min(最小),@avg(平均值)
 ```
+* iOS中的事件传递机制:当app接收到触摸事件后
