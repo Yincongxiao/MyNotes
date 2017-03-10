@@ -1,4 +1,5 @@
 ##信号量dispatch_semaphore_t
+声明:文章出自[http://www.cnblogs.com/snailHL/p/3906112.html](http://www.cnblogs.com/snailHL/p/3906112.html)
 > 信号量是GCD中比较重要的函数,用来控制多线程操作中的并发量,当信号数控制为1时可以用作多线程中的锁来保护线程资源,与之相关的函数有三个`dispatch_semaphore_create，dispatch_semaphore_signal，dispatch_semaphore_wait`
 
 * **dispatch_semaphore_t &nbsp dispatch_semaphore_create(long value)**
