@@ -16,4 +16,9 @@ NSMutableArray *ma = [NSMutableArray array];
     //@min(最小),@avg(平均值)
 ```
 * iOS中的事件传递机制:当app接收到触摸事件后将该事件提交到由UIApplication对象管理的事件队列中,然后由application对象负责分发,大概流程为:eventQueue->RootWindow->window.rootViewController->Vc.view->subViews.
-其中当事件传递给view时会首先调用`- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event`方法来寻找处理该事件最合适的view,
+其中当事件传递给view时会首先调用该view的`- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event`方法来寻找处理该事件最合适的view,该方法的默认实现大概是以下几个步骤:
+ - 检查自身的`userInteractionEnabled`是否为yes
+ - 检查自身的`alpha`值是否>0.01
+ - 调用`- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event`来判断事件的触摸点是否在自身的bouns范围内
+ 
+ 以上三点但凡有一个不成立那么该方法会返回false,那么说明在该view上没有找到能够处理该事件的view,
