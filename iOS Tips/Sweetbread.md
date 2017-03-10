@@ -25,3 +25,27 @@ NSMutableArray *ma = [NSMutableArray array];
  
 * 以上三点但凡有一个不成立那么该方法会返回nil,那么说明在该view上没有找到能够处理该事件的view,那么该view上所有子view都不会接受该点击事件,子view的`- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event`都不会被调用
 * 如果都成立说明该view本身具有接受该事件的能力,该方法会顺着view的层级结构依次调用子view的`- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event`方法来寻找最合适的view,原则还是上面那三点.找到以后进行返回,如果没有找到那么返回该view本身.
+
+#####获取磁盘空间
+```objc
+static int64_t _YYDiskSpaceFree() {
+    NSError *error = nil;
+    NSDictionary *attrs = [[NSFileManager defaultManager] attributesOfFileSystemForPath:NSHomeDirectory() error:&error];
+    if (error) return -1;
+    //NSFileSystemSize 获取全部磁盘空间
+    int64_t space =  [[attrs objectForKey:NSFileSystemFreeSize] longLongValue];
+    if (space < 0) space = -1;
+    return space;
+}
+```
+
+#####利用GCD信号量来进行加锁
+```objc
+//创建锁
+_globalInstancesLock = dispatch_semaphore_create(1);
+//加锁
+dispatch_semaphore_wait(_globalInstancesLock, DISPATCH_TIME_FOREVER);
+//do something safely
+//解锁
+dispatch_semaphore_signal(_globalInstancesLock);
+```
