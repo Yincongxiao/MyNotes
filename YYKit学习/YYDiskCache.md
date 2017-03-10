@@ -65,4 +65,4 @@ static void _YYDiskCacheInitGlobal() {
     });
 }
 ```
-* 上面初始化中用来保存cache的容器使用到了NSMapTable对象,`NSMapTable`是在iOS6以后推出的类似NSMutableDictionary的容器类,它与NSDictionary的区别是`NSMapTable`可以指定使用什么策略来持有所存储对象的键和值,
+* 上面初始化中用来保存cache的容器使用到了NSMapTable对象,`NSMapTable`是在iOS6以后推出的类似NSMutableDictionary的容器类,它与NSDictionary的区别是`NSMapTable`可以指定使用什么策略来持有所存储对象的键和值,在这里选择的是key使用强引用,值使用若引用,也就是这个mapTable并不会使所存储的cache对象retainCount增加,并且当所存储的cache对象被释放后,mapTable会自动将cache移除.
