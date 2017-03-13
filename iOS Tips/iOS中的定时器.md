@@ -1,7 +1,7 @@
 ###iOS中的定时器
 * iOS开发中实现定时器可以有三种方案:
     - `performSelector: withObject: afterDelay:`                      
-    - GCD中的`void
+    -  GCD中的`void
 dispatch_after(dispatch_time_t when,
 	dispatch_queue_t queue,
 	dispatch_block_t block);`
@@ -18,3 +18,4 @@ dispatch_after(dispatch_time_t when,
 + (NSTimer *)timerWithTimeInterval:(NSTimeInterval)ti invocation:(NSInvocation *)invocation repeats:(BOOL)yesOrNo;
 + (NSTimer *)scheduledTimerWithTimeInterval:(NSTimeInterval)ti invocation:(NSInvocation *)invocation repeats:(BOOL)yesOrNo;
 ```
+* 如果调用NSTimer的`+ (NSTimer *)timerWithTimeInterval:(NSTimeInterval)ti target:(id)aTarget selector:(SEL)aSelector userInfo:(nullable id)userInfo repeats:(BOOL)yesOrNo;`会有内存泄露的风险.首先,timer在创建以后线程的runloop会持有这个timer,而timer会持有
