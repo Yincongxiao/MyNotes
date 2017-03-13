@@ -23,3 +23,16 @@ dispatch_after(dispatch_time_t when,
 #### dispatch_after()
 * 系统会帮我们处理线程级的逻辑，这样也我们更易于享受系统对线程所做的优化。除此之外，我们不用关心runloop的问题。并且调用的对象也不会被强行持有，这样上述的内存问题也不复存在。当然，需要注意block会持有其传入的对象，但这可以通过weakself解决。所以在这种延迟操作方案中，使用dispatch_after更佳。
 * 但是，dispatch_after有个致命的弱点：dispatch_after一旦执行后，就不能撤销了。而performSelector可以使用cancelPreviousPerformRequestsWithTarget方法撤销，NSTimer也可以调用invalidate进行撤销。（注意：撤销任务与创建timer任务必须在同一个线程，即同一个runloop）
+* 不过我们有解决办法,强大的GCD提供的dispatch_source_t 可以创建一个timer
+```objc
+ //获取queue
+    dispatch_queue_t g_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    //创建一个timer类型的source
+    dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, g_queue);
+    //配置source的首次执行时间,执行时间间隔,精确度.
+    dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC, 0.1 * NSEC_PER_SEC);
+    //开始timer
+    dispatch_resume(timer);
+    //合适的时机cancel掉
+    dispatch_source_cancel(timer);
+```
