@@ -49,8 +49,3 @@ dispatch_semaphore_wait(_globalInstancesLock, DISPATCH_TIME_FOREVER);
 //解锁
 dispatch_semaphore_signal(_globalInstancesLock);
 ```
-
-#####NSTimer的不安全因素
-* iOS开发中实现定时器可以有三种方案:
-    - `preferSelfperformSelector: withObject: afterDelay:    `
-NSTimer 大概有两类方法可以出发一个定时器进行重复或者定时操作,其中
