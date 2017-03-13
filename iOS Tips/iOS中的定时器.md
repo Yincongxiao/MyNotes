@@ -18,4 +18,4 @@ dispatch_after(dispatch_time_t when,
 + (NSTimer *)timerWithTimeInterval:(NSTimeInterval)ti invocation:(NSInvocation *)invocation repeats:(BOOL)yesOrNo;
 + (NSTimer *)scheduledTimerWithTimeInterval:(NSTimeInterval)ti invocation:(NSInvocation *)invocation repeats:(BOOL)yesOrNo;
 ```
-* 如果调用NSTimer的`+ (NSTimer *)timerWithTimeInterval:(NSTimeInterval)ti target:(id)aTarget selector:(SEL)aSelector userInfo:(nullable id)userInfo repeats:(BOOL)yesOrNo;`会有内存泄露的风险.首先,timer在创建以后线程的runloop会持有这个timer,而timer会持有
+* 如果调用NSTimer的`+ (NSTimer *)timerWithTimeInterval:(NSTimeInterval)ti target:(id)aTarget selector:(SEL)aSelector userInfo:(nullable id)userInfo repeats:(BOOL)yesOrNo;`会有内存泄露的风险.首先,timer在创建以后线程的runloop会持有这个timer,而timer会持有target对象,timer只有在收到`- invalidate`方法以后才会释放,并且释放target对象,所以如果我们在target的delloc方法里面调用[timer invalidate];是没有效果的,是因为该对象没有机会调用自己的delloc方法.
