@@ -37,7 +37,7 @@
                                                                                                                 NSFontAttributeName : [UIFont fontWithName:@"Zapfino" size:12],
                                                                                                                 NSParagraphStyleAttributeName : style,
                                                                                                                 NSForegroundColorAttributeName : [UIColor whiteColor],
-                                                                                                                NSBackgroundColorAttributeName : [UIColor whiteColor],
+                                                                                                                NSBackgroundColorAttributeName : [UIColor blackColor],
                                                                                                                 NSLigatureAttributeName : @(1),
                                                                                                                 NSKernAttributeName : @(1),
                                                                                                                 }];
