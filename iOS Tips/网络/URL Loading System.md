@@ -13,6 +13,3 @@ ULS的结构![](/assets/URL Loading System.png)
  encryption (https://)
  * Local file URLs (file:///)
  * Data URLs (data://)
-
-#####NSURLRequest.h简述.
-* 描述了基于一系列基于网络协议以及url-scheme系统的网络资源加载方式,一共有可变和不可变两个版本分别是`NSMutableURLRequest`,`NSURLRequest`.其中有若干个常量来控制url请求的缓存策略.
