@@ -13,3 +13,5 @@ ULS的结构![](/assets/URL Loading System.png)
  encryption (https://)
  * Local file URLs (file:///)
  * Data URLs (data://)
+ 
+ 
