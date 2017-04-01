@@ -14,6 +14,6 @@
  如果你在创建NSURLSession的时候没有指定delegate对象,那么默认使用系统自带的delegate,下面是一些在使用系统自带的delegate过程中必须实现的步骤
   * 创建一个session configration简称cs对象,如果是后台session这个cs对象必须包含一个唯一的标识,保存这个标识,以后如果app发生crash或者session被暂停或终结以后用来恢复dession数据.
   * 创建session对象,指定上一步中的cs,将sessionDelegate设置为nil
-  * 使用session创建session task简称st对象,每一个st对象代表了一次网络请求,
+  * 使用session创建session task简称st对象,每一个st对象代表了一次网络请求操作,
  #####使用自定义的delegate
  
