@@ -44,4 +44,5 @@
   ```
   ***
  #####使用自定义的delegate
- 
+ 如果你的app满足文章开始叙述的哪几种情况,那么你应该自定义自己的delegate进行与服务器的会话.在使用自定义的delegate的时候你必须提供一个遵循了``NSURLSessionDelegate`协议簇中的一个或者几个.使用这些协议会给你带来一下便利.
+  * 如果你使用download task, `NSURLSession`对象会通过delegate告诉你文件下载到本地的url.
