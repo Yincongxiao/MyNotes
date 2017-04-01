@@ -17,6 +17,9 @@
   3 使用session创建session task简称st对象,每一个st对象代表了一次网络请求任务,默认task被创建出来以后是停止状态,需要我们手动调用`- resume`方法开启任务,task一定是` NSURLSessionTask`的子类.分别有`NSURLSessionDataTask, NSURLSessionUploadTask, or NSURLSessionDownloadTask, `,其中`NSURLSessionDataTask`,`NSURLSessionUploadTask`并没有在父类上做扩展,只是用于区别不用的请求任务.
   4 对于下载的task,在服务器传输过程中,我们可以通过` cancelByProducingResumeData:`方法暂停下载任务, 然后通过` downloadTaskWithResumeData: or downloadTaskWithResumeData:completionHandler: `来恢复下载任务
   5 任务完成后就会调用task的`completion handler`
+  注意: NSURLSession本身并不会通过error参数来抛异常,通常只会把服务器返回的错误抛过来,我们可以通过错误码来确定发生的错误.
+  6 当你的app不再需要session,调` invalidateAndCancel `(结束没有完成的任务)或者    
+  `finishTasksAndInvalidate `(将没有结束的请求完成以后再销毁session对象)来结束任务.
   
   ```c
   NSURL *url = [NSURL URLWithString:@"http://example.com/path/index.json"];
