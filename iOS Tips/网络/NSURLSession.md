@@ -12,12 +12,19 @@
  
  #####使用系统提供的delegate
  如果你在创建NSURLSession的时候没有指定delegate对象,那么默认使用系统自带的delegate,下面是一些在使用系统自带的delegate过程中必须实现的步骤
-  * 创建一个session configration简称cs对象,如果是后台session这个cs对象必须包含一个唯一的标识,保存这个标识,以后如果app发生crash或者session被暂停或终结以后用来恢复dession数据.
-  * 创建session对象,指定上一步中的cs,将sessionDelegate设置为nil
-  * 使用session创建session task简称st对象,每一个st对象代表了一次网络请求操作,
+  1 创建一个session configration简称cs对象,如果是后台session这个cs对象必须包含一个唯一的标识,保存这个标识,以后如果app发生crash或者session被暂停或终结以后用来恢复dession数据.
+  2 创建session对象,指定上一步中的cs,将sessionDelegate设置为nil
+  3 使用session创建session task简称st对象,每一个st对象代表了一次网络请求任务,默认task被创建出来以后是停止状态,需要我们手动调用`- resume`方法开启任务,task一定是` NSURLSessionTask`的子类.分别有`NSURLSessionDataTask, NSURLSessionUploadTask, or NSURLSessionDownloadTask, `,其中`NSURLSessionDataTask`,`NSURLSessionUploadTask`并没有在父类上做扩展,只是用于区别不用的请求任务.
+  4 对于下载的task,在服务器传输过程中,我们可以通过` cancelByProducingResumeData:`方法暂停下载任务, 然后通过` downloadTaskWithResumeData: or downloadTaskWithResumeData:completionHandler: `来恢复下载任务
+  5 任务完成后就会调用task的`completion handler`
+  
   ```c
   NSURL *url = [NSURL URLWithString:@"http://example.com/path/index.json"];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+   //在request这里我们可以对此次请求进行一些设置,比如cachePolicy,timeoutInterval等
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:0.5];
+    //此方法在NSMutableURLRequest (NSMutableHTTPURLRequest)中声明.
+    //所以只有NSMutableURLRequest才能设置请求方法,请求体中可以设置cookie等信息
+    request.HTTPMethod = @"GET";
     //如果completionHandler设置为nil,那你应该给session设置delegate,在代理方法中接受网络回调
     //data代表服务器返回的数据,response包含了请求的url和回包的header等信息.
     NSURLSessionDataTask *dataTask = [_session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
