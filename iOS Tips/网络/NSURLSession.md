@@ -20,7 +20,7 @@
   注意: NSURLSession本身并不会通过error参数来抛异常,通常只会把服务器返回的错误抛过来,我们可以通过错误码来确定发生的错误.
   6 当你的app不再需要session,调` invalidateAndCancel `(结束没有完成的任务)或者    
   `finishTasksAndInvalidate `(将没有结束的请求完成以后再销毁session对象)来结束任务.
-  
+  下面代码是以普通http的get请求进行示例.
   ```c
   NSURL *url = [NSURL URLWithString:@"http://example.com/path/index.json"];
    //在request这里我们可以对此次请求进行一些设置,比如cachePolicy,timeoutInterval等
