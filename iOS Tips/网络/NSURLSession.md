@@ -9,7 +9,7 @@
  * Limits caching programmatically.限制缓存策略
  * Limits HTTP redirects programmatically.限制url重定向
  
- 
+ ***
  #####使用系统提供的delegate
  如果你在创建NSURLSession的时候没有指定delegate对象,那么默认使用系统自带的delegate,下面是一些在使用系统自带的delegate过程中必须实现的步骤
   1 创建一个session configration简称cs对象,如果是后台session这个cs对象必须包含一个唯一的标识,保存这个标识,以后如果app发生crash或者session被暂停或终结以后用来恢复dession数据.
@@ -18,8 +18,8 @@
   4 对于下载的task,在服务器传输过程中,我们可以通过` cancelByProducingResumeData:`方法暂停下载任务, 然后通过` downloadTaskWithResumeData: or downloadTaskWithResumeData:completionHandler: `来恢复下载任务
   5 任务完成后就会调用task的`completion handler`
   注意: NSURLSession本身并不会通过error参数来抛异常,通常只会把服务器返回的错误抛过来,我们可以通过错误码来确定发生的错误.
-  6 当你的app不再需要session,调` invalidateAndCancel `(结束没有完成的任务)或者    
-  `finishTasksAndInvalidate `(将没有结束的请求完成以后再销毁session对象)来结束任务.
+  6 当你的app不再需要session,调` invalidateAndCancel `(结束没有完成的任务)或者`finishTasksAndInvalidate `(将没有结束的请求完成以后再销毁session对象)来结束任务.
+
   下面代码是以普通http的get请求进行示例.
   ```c
   NSURL *url = [NSURL URLWithString:@"http://example.com/path/index.json"];
@@ -42,5 +42,6 @@
     //默认task是暂停的,要手动resume
     [dataTask resume];
   ```
+  ***
  #####使用自定义的delegate
  
