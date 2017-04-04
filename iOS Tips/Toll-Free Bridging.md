@@ -1,5 +1,6 @@
 ####Toll-Free Bridging
-我们日常开发中一般使用Fundation的类,其中有一些是跟Core Fundation 框架中的类是可以进行内部转换的,这个特性就被称之为`Toll-Free Bridging`,意味着你可以使用同一种数据结构作为Core Fundation 中函数的参数,或者作为Fundation中方法的参数.例如[NSLocal](https://developer.apple.com/reference/foundation/nslocale)与[CFLocal](https://developer.apple.com/reference/corefoundation/cflocale)就是Toll-Free Bridging 的.所以,如果你在使用一个需要传递(NSLocal *)类型的参数的OC方法的时候,你可以传递一个CFLocalRef类型的值进去.反过来也一样.你可以只创建以一种类型的对象来避免编译器的警告.
+翻译自[Apple](https://developer.apple.com/library/content/documentation/General/Conceptual/CocoaEncyclopedia/Toll-FreeBridgin/Toll-FreeBridgin.html#//apple_ref/doc/uid/TP40010810-CH2).
+我们日常开发中一般使用Fundation的类,其中有一些是跟Core Fundation 框架中的类是可以进行内部转换的,这个特性就被称之为`Toll-Free Bridging`,意味着你可以使用同一种数据结构作为Core Fundation 中函数的参数,或者作为Fundation中方法的参数.例如[NSLocal](https://developer.apple.com/reference/foundation/nslocale)与[CFLocal](https://developer.apple.com/reference/corefoundation/cflocale)就是Toll-Free Bridging 的.所以,如果你在使用一个需要传递(NSLocal *)类型的参数的OC方法的时候,你可以传递一个CFLocalRef类型的值进去.反过来也一样.你可以只创建以一种类型的对象s来避免编译器的警告.
 例如以下的例子
 ```c
 NSLocale *gbNSLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"];
