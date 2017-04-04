@@ -1,4 +1,4 @@
-###NSURL
+iCloud Document Thumbnails###NSURL
 ####URL
 > URL统一资源定位符是对可以从互联网上得到的资源的位置和访问方法的一种简洁的表示，是互联网上标准资源的地址。互联网上的每个文件都有一个唯一的URL，它包含的信息指出文件的位置以及浏览器应该怎么处理它。
 
@@ -101,6 +101,24 @@ Security-scoped URLs提供了获取app沙盒之外的资源的方法,在iOSapp�
 如果使用Security-scoped URLs来获取资源会用到NSURL的`-start​Accessing​Security​Scoped​Resource`方法(或者使用Core Fundation中的`CFURLStop​Accessing​Security​Scoped​Resource `函数).在使用完毕后一定要使用`- stop​Accessing​Security​Scoped​Resource `(或者Core Fundation的`CFURLStop​Accessing​Security​Scoped​Resource`函数)注销这个请求
 * 假如注销失败(返回值为NO)会造成内存泄露,如果内存泄露到一定程度那么你的app将失去通过file -system locations访问沙盒,Powerbox,security-scoped bookmarks,的权限!
 
-######Security-Scoped URLs and String Paths
+######iCloud Document Thumbnails
+iOS8.0之后NSURL包含了直接读取和设置document thumbnails的方式来改变iCloud document
+
+```c
+NSURL *URL = [self URLForDocument];
+NSDictionary *thumbnails = nil;
+NSError *error = nil;
+ 
+BOOL success = [URL getPromisedItemResourceValue:&thumbnails
+                                          forKey:NSURLThumbnailDictionaryKey
+                                           error:&error];
+if (success) {
+  NSImage *image = thumbnails[NSThumbnail1024x1024SizeKey];
+} else {
+  // handle the error
+}
+```
+
+
 
 
