@@ -49,5 +49,9 @@
   * 代理可以控制存在的验证请求.
   * 代理可以通过stream-based方式向服务器进行二进制文件的传输
   * 代理可以决定是否进行url重定向.
-  * 代理模式可以在给服务器上传数据的过程中,
-  * delegate
+  * 在使用scream-based给服务器上传数据的过程中,可以通过代理得到需要传输的scream body.
+  * NSURLSession通过delegate让我们的app了解到传输的详细过程,比如开始传输的回调,将data请求转换成下载请求,以及传输过程中的data的每次到达回调
+  * 当传输完成以后NSURLSession可以通过delegate通知我们的app
+  
+如果你使用自定义跌delegate并且需要后台任务,那么NSURLSession的生命周期将会更加复杂,以下是你使用session进行后台任务的几个必要步骤
+  1 创建基于后台任务的sessionConfiguration
