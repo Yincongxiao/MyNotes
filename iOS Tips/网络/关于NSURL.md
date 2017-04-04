@@ -26,6 +26,72 @@ scheme              path
 一般来说，对于同一服务器上的文件，应该总是使用相对URL，它们更容易输入，而且在将页面从本地系统转移到服务器上时更方便，只要每个文件的相对位置保持不变，链接就仍然是有效地。
 
 ####NSURL
-一个NSURL代表了一个资源的url,资源可以是放在远程服务器上的,也可以是放在本地磁盘d额,或者是内存中的二进制数据.
+一个NSURL代表了一个资源的url,资源可以是放在远程服务器上的,也可以是放在本地磁盘的,或者是内存中的二进制数据.
+* 通过NSURL,你可以直接访问资源文件,如果这个url代表这本地文件,你甚至可以改变这个文件的最后修改时间.你还可以使用NSURLConnection,NSURLSession,NSURLDownload等技术来进行远程服务器的访问.详细可以看[URL Session Programming Guide.
+](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.html#//apple_ref/doc/uid/10000165i)
 
+* 苹果推荐我们使用URL的方式进行本地文件的访问,大部分对本地文件的读写方法中都包含了通过NSURL的方式,例如你可以通过`init​With​Contents​Of​URL:​encoding:​error:​ `来初始化NSString类型的资源,或者`init​With​Contents​Of​URL:​options:​error:​ `来初始化NSData类型的资源.
+* 你可以通过url来进行app之间的沟通,例如在macOS中NSWorkspace提供了`openURL:`方法,与之对应的iOS中UIApplication类也提供了`openURL:`方法.
+* 在appKit framework中可以通过url进行剪切板的使用.
+* NSURL类与CoreFundation中的`CFURLRef`是Toll-Free Bridging 的.
+
+#####NSURL的结构
+一个NSURL对象由两部分组成:一个可能为nil的baseURL和一个相对于baseURL的path部分.如果一个NSURL对象的baseURL为nil,那么我们认为path部分就是url的绝对地址.
+```c
+NSURL *baseURL = [NSURL fileURLWithPath:@"file:///path/to/user/"];
+NSURL *URL = [NSURL URLWithString:@"folder/file.html" relativeToURL:baseURL];
+NSLog(@"absoluteURL = %@", [URL absoluteURL]);///file:​///path/to/user/folder/file.html.
+```
+我们可以使用NSURL属性来获取到url中的各个部分.例如url` https:​//johnny:​p4ssw0rd@www.example.com:​443/script.ext;param=value?query=value#ref`可以分解为以下几部分.
+
+Component | Value
+-|-
+scheme|https
+user|johnny
+password|p4ssw0rd
+host|www.example.com
+port|443
+path|/script.ext
+path​Extension|ext
+path​Components|["/", "script.ext"]
+parameter​String|param=value
+query|query=value
+fragment|ref
+
+#####BookMark and Security Scope
+bookMarks是从iOS4.0以后NSURL提供的一种引用本地文件系统资源的方式.通过bookmark我们可以获得本地文件的引用,如果用户重启我们app,或者用户将该资源移动到其他文件夹,或者对该文件重命名,我们仍然可以时候bookmark来获取到该资源.
+根据文件的URL创建bookmark
+```c
+- (NSData*)bookmarkForURL:(NSURL*)url {
+    NSError* theError = nil;
+    NSData* bookmark = [url bookmarkDataWithOptions:NSURLBookmarkCreationSuitableForBookmarkFile
+                                            includingResourceValuesForKeys:nil
+                                            relativeToURL:nil
+                                            error:&theError];
+    if (theError || (bookmark == nil)) {
+        // Handle any errors.
+        return nil;
+    }
+    return bookmark;
+}
+```
+读取bookmark
+
+```c
+- (NSURL*)urlForBookmark:(NSData*)bookmark {
+    BOOL bookmarkIsStale = NO;
+    NSError* theError = nil;
+    NSURL* bookmarkURL = [NSURL URLByResolvingBookmarkData:bookmark
+                                            options:NSURLBookmarkResolutionWithoutUI
+                                            relativeToURL:nil
+                                            bookmarkDataIsStale:&bookmarkIsStale
+                                            error:&theError];
+ 
+    if (bookmarkIsStale || (theError != nil)) {
+        // Handle any errors
+        return nil;
+    }
+    return bookmarkURL;
+}
+```
 
