@@ -118,7 +118,7 @@ if (success) {
   // handle the error
 }
 ```
-
+使用UIDocument的子类去管理你的文件,通过重写`file​Attributes​To​Write​To​URL:​for​Save​Operation:​error:​`并且返回包含thumbnail keys 的dictionary来修改thumbnail.
 
 
 
