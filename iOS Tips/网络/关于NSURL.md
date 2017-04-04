@@ -59,7 +59,8 @@ query|query=value
 fragment|ref
 
 #####BookMark and Security Scope
-bookMarks是从iOS4.0以后NSURL提供的一种引用本地文件系统资源的方式.通过bookmark我们可以获得本地文件的引用,如果用户重启我们app,或者用户将该资源移动到其他文件夹,或者对该文件重命名,我们仍然可以时候bookmark来获取到该资源.
+######bookmark
+bookMarks是从iOS4.0以后NSURL提供的一种引用本地文件系统资源的方式.通过bookmark我们可以获得本地文件的引用,如果用户重启我们app,或者用户将该资源移动到其他文件夹,或者对该文件重命名,我们仍然可以使用bookmark来获取到该资源.
 根据文件的URL创建bookmark
 ```c
 - (NSData*)bookmarkForURL:(NSURL*)url {
@@ -94,4 +95,12 @@ bookMarks是从iOS4.0以后NSURL提供的一种引用本地文件系统资源的
     return bookmarkURL;
 }
 ```
+######Security-Scope URLs
+Security-scoped URLs提供了获取app沙盒之外的资源的方法,在iOSapp中使用[ UIDocument​Picker​View​Controller](https://developer.apple.com/reference/uikit/uidocumentpickerviewcontroller?language=objc)来打开或者移除documents的时候需要用到Security-scoped URLs
+对于iOSapp,如果你是用[UIDocument](https://developer.apple.com/reference/uikit/uidocument?language=objc)去获取url,那么系统会帮我们管理security-scoped URL
+如果使用Security-scoped URLs来获取资源会用到NSURL的`-start​Accessing​Security​Scoped​Resource`方法(或者使用Core Fundation中的`CFURLStop​Accessing​Security​Scoped​Resource `函数).在使用完毕后一定要使用`- stop​Accessing​Security​Scoped​Resource `(或者Core Fundation的`CFURLStop​Accessing​Security​Scoped​Resource`函数)注销这个请求
+* 假如注销失败(返回值为NO)会造成内存泄露,如果内存泄露到一定程度那么你的app将失去通过file -system locations访问沙盒,Powerbox,security-scoped bookmarks,的权限!
+
+######Security-Scoped URLs and String Paths
+
 
