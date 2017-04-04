@@ -56,4 +56,5 @@
 如果你使用自定义跌delegate并且需要后台任务,那么NSURLSession的生命周期将会更加复杂,以下是你使用session进行后台任务的几个必要步骤
   1 创建基于后台任务的sessionConfiguration,这个sC必须包含一个唯一的标识符,假如你的app闪退或者被挂起, 你可以使用这个sc来重新获取之前的session
   2 创建session对象,指定创建的sessionConfiguration对象,和delegate对象
-  3 
+  3 通过session创建代表一次网络请求的datatask对象,并且启动这个datatask
+  4 如果客服端收到服务器发来的要求验证的回调,那么
