@@ -40,3 +40,13 @@
 //这种要求客户端的对服务器的信任来建立凭证，所谓SecTrust用来描述信任某个证书用来做什么的东西，比如一个证书可以用来做SSL，用来做签名，邮件安全（这个证书以及可以用来做什么来构造一个信任）
 - (instancetype)initWithTrust:(SecTrustRef)trust NS_AVAILABLE(10_6, 3_0);
 ```
+注意一下以上构造器中的persistence参数,它是一个枚举值,指定把credential保存多久
+```c
+typedef NS_ENUM(NSUInteger, NSURLCredentialPersistence) {
+    NSURLCredentialPersistenceNone,//不保存credential
+    NSURLCredentialPersistenceForSession,//只保存在当前回话中
+    NSURLCredentialPersistencePermanent,//永久保存,保存在钥匙串中,在OSX中如果用户允许的话是可以访问到所有app保存的credential,但是在iOS中只可以访问到本app的credential.
+    NSURLCredentialPersistenceSynchronizable NS_ENUM_AVAILABLE(10_8, 6_0)//永久保存,会被同步到iColud中,在同一个appId下不同设备都可访问
+};
+```
+#####NSURLProtectionSpace
