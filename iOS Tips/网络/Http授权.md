@@ -20,7 +20,8 @@
                               
 ```
 方法,这个方法会在接收到服务器响应的didReceiveResponse之前被调用,旨在让我们根据不同的情况进行处理.
-                             
+   
+#####NSURLAuthenticationChallenge                                                      
 `NSURLAuthenticationChallenge`类，这个类是认证挑战类，也就是要求客户端进行挑战，要接收挑战也就是客户端提供挑战的凭证(用户和密码，或者客户端证书，或者信任服务器证书，或者代理），iOS提供了一个NSURLCredential的类来表示凭证,可以通过如下函数来建立挑战凭证.
 
 #####NSURLCredential
@@ -49,4 +50,7 @@ typedef NS_ENUM(NSUInteger, NSURLCredentialPersistence) {
     NSURLCredentialPersistenceSynchronizable NS_ENUM_AVAILABLE(10_8, 6_0)//永久保存,会被同步到iColud中,在同一个appId下不同设备都可访问
 };
 ```
+也就是说我们可以将credential通过以上策略保存起来,而用来保存凭证的类叫做`NSURLCredentialStorage`
+#####NSURLCredentialStorage
+
 #####NSURLProtectionSpace
