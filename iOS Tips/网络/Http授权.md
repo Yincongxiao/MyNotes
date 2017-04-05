@@ -23,15 +23,16 @@
 这个类代表了授权证书.它的构造方法分别放在三个分类中.
 ```
 @interface NSURLCredential(NSInternetPassword)
-//使用用户名和密码建立凭证,这种最常见的方式.
+//使用用户名和密码建立凭证,用于401错误的挑战凭证和代理的挑战凭证,这种最常见的方式.
 - (instancetype)initWithUser:(NSString *)user password:(NSString *)password persistence:(NSURLCredentialPersistence)persistence;
 ```
 ```
 @interface NSURLCredential(NSClientCertificate)
-//在与服务器进行安全捂手期间,服务器可能会要求客户端提供安全证书,安全证书一般保存在keychain中.下面的方法就是keychain中取出对应的证书.
+//在与服务器进行安全握手期间,服务器可能会要求客户端提供安全证书,安全证书一般保存在keychain中.下面的方法就是keychain中取出对应的证书.
 - (instancetype)initWithIdentity:(SecIdentityRef)identity certificates:(nullable NSArray *)certArray persistence:(NSURLCredentialPersistence)persistence NS_AVAILABLE(10_6, 3_0);
 ```
 ```
 @interface NSURLCredential(NSServerTrust)
+//这种要求客户端的对服务器的信任来建立凭证，所谓SecTrust用来描述信任某个证书用来做什么的东西，比如一个证书可以用来做SSL，用来做签名，邮件安全（这个证书以及可以用来做什么来构造一个信任）
 - (instancetype)initWithTrust:(SecTrustRef)trust NS_AVAILABLE(10_6, 3_0);
 ```
