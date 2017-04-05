@@ -52,5 +52,21 @@ typedef NS_ENUM(NSUInteger, NSURLCredentialPersistence) {
 ```
 也就是说我们可以将credential通过以上策略保存起来,而用来保存凭证的类叫做`NSURLCredentialStorage`
 #####NSURLCredentialStorage
-
+它是一个单例类,用来管理我们存储的所有credential
 #####NSURLProtectionSpace
+以上我们知道了服务器向客户端发起挑战,并且挑战分为以上四种类型,那么我们怎么知道服务器给我们的挑战是什么类型的呢,这就用到了NSURLProtectionSpace,(保护空间)
+它有以下属性
+```c
+//只能用在http请求中的401认证,realm值(认证域)
+@property (nullable, readonly, copy) NSString *realm;
+//认证保护空间是否来自代理服务器
+@property (readonly) BOOL isProxy;
+//服务端主机地址，如果是代理则代理服务器地址
+@property (readonly, copy) NSString *host;
+//服务端端口地址，如果是代理则代理服务器的端口
+@property (readonly) NSInteger port;
+//代理类型，只对代理授权，比如http代理，socket代理等
+@property (nullable, readonly, copy) NSString *proxyType;
+//代理使用的协议,只对代理授权,如果不是代理,那么为nil
+@property (nullable, readonly, copy) NSString *protocol;
+```
