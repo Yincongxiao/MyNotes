@@ -2,7 +2,7 @@
 你可以用两种方式来使用NSURLSession.一种是使用系统自带的delegate,另一种是自定义delegate.如果你有如下的使用场景其中的一个,那么你必须使用自定义的delegate
  * Uses background sessions to download or upload content while your app is not running.
  启动后台任务进行资源的下载或者上传
- * Performs custom authentication.自定义授权
+ * Performs custom authentication.[自定义授权](http://blog.csdn.net/zhdzxc123/article/details/53927842)
  * Performs custom SSL certificate verification.使用ssl证书验证
  * Decides whether a transfer should be downloaded to disk or displayed based on the MIME type returned by the server or other similar criteria.更改文件存储地址(默认cache)
  * Uploads data from a body stream (as opposed to an NSData object).通过http body上传数据
@@ -57,4 +57,4 @@
   1 创建基于后台任务的sessionConfiguration,这个sC必须包含一个唯一的标识符,假如你的app闪退或者被挂起, 你可以使用这个sc来重新获取之前的session
   2 创建session对象,指定创建的sessionConfiguration对象,和delegate对象
   3 通过session创建代表一次网络请求的datatask对象,并且启动这个datatask
-  4 如果客服端收到服务器发来的要求验证的回调,那么
+  4 如果服务器要求必须授权
