@@ -4,7 +4,7 @@
 2. 当我们使用HTTPS协议时，一旦服务器证书不具备信任则需要客户端确认是否信任此服务器证书；
 3. 使用HTTPS协议,当服务端也需要客户端提供证书时；
 4. 我们是通过代理服务器来请求HTTP的,我们需要提供代理服务器的用户和密码;
-我们称以上这些情况称为服务端要求客户端接收挑战。
+我们把以上这些情况称为服务端要求客户端接收挑战。
 当收到服务器发来的以上挑战时,我们客户端会收到一个相应的回调来通知我们,在使用NSURLSession对应的挑战方法是在`NSURLSessionTaskDelegate`中的
 \```
 - (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
