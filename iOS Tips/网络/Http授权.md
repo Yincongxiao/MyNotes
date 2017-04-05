@@ -6,12 +6,14 @@
 4. 我们是通过代理服务器来请求HTTP的,我们需要提供代理服务器的用户和密码;
 我们把以上这些情况称为服务端要求客户端接收挑战。
 当收到服务器发来的以上挑战时,我们客户端会收到一个相应的回调来通知我们,在使用NSURLSession对应的挑战方法是在`NSURLSessionTaskDelegate`中的
-\```
+```
+//session 级别的挑战
 - (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
                                              completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * _Nullable credential))completionHandler;
 ```
 
 ```
+//特定task的挑战
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
                             didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge 
                               completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * _Nullable credential))completionHandler;
