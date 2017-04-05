@@ -15,7 +15,7 @@
                               completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * _Nullable credential))completionHandler;
                               
 ```
-方法,这个方法会在接收到服务器响应的对应方法之前被调用,旨在让我们根据不同的情况进行处理.
+方法,这个方法会在接收到服务器响应的didReceiveResponse之前被调用,旨在让我们根据不同的情况进行处理.
                              
 `NSURLAuthenticationChallenge`类，这个类是认证挑战类，也就是要求客户端进行挑战，要接收挑战也就是客户端提供挑战的凭证(用户和密码，或者客户端证书，或者信任服务器证书，或者代理），iOS提供了一个NSURLCredential的类来表示凭证,可以通过如下函数来建立挑战凭证.
 
