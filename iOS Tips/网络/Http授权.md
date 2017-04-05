@@ -1,8 +1,8 @@
 ####HTTP请求Challenge
 在iOS开发中`Challenge`是HTTP中带授权要求的处理机制。
 1. 有些URL访问需要具有权限否则返回401的错误，因此客户端需要在HTTP的请求头中带上授权的用户和密码；
-2. 当我们使用HTTPS协议时，一旦服务器证书不具备信任则需要客户端确认是否信任此服务器证书；或者用HTTPS协3. 议当服务端也需要客户端提供证书时；
-4. 我们是通过代理服务器来请求HTTP的,我们需要提供代理服务器的用户和密码，我们称这些情况称为服务端要求客户端接收挑战。
+2. 当我们使用HTTPS协议时，一旦服务器证书不具备信任则需要客户端确认是否信任此服务器证书；或者用HTTPS协议当服务端也需要客户端提供证书时；
+3. 我们是通过代理服务器来请求HTTP的,我们需要提供代理服务器的用户和密码，我们称这些情况称为服务端要求客户端接收挑战。
 当收到服务器发来的以上挑战时,我们客户端会受到一个相应的回调来通知我们,在使用NSURLSession对应的挑战方法是在`NSURLSessionTaskDelegate`中的
 ```
 - (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
