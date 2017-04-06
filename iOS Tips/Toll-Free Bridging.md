@@ -50,3 +50,20 @@ CFShow((CFStringRef) [@"nsIdentifier: " stringByAppendingString:nsIdentifier]);
 |CFURLRef|NSURL|OS X 10.0|
 |CFWriteStreamRef|NSOutputStream|OS X 10.0|
 * 注意:并不是所有的类都是Toll-Free Bridging 的,例如NSRunLoop和CFRunLoopRef就不是,NSDateFormate和CFDateFormateRef也不是.
+```c
+NSArray *anNSArray = @[@1,@2,@3];
+CFArrayRef anCFArray = (__bridge CFArrayRef)anNSArray;
+NSLog(@"size of array is %li",CFArrayGetCount(anCFArray));
+输出台:
+//size of array is = 3
+```
+这里用到了`__bridge`关键字,它的意思是,虽然将NSArray类型的对象转成了CFArrayRef类型的结构,但是ARC仍然对该对象具有内存管理权限.
+```c
+NSArray *anNSArray = @[@1,@2,@3];
+CFArrayRef anCFArray = (__bridge_retained CFArrayRef)anNSArray;
+NSLog(@"size of array is %li",CFArrayGetCount(anCFArray));
+CFRelease(anCFArray);
+输出台:
+//size of array is = 3
+```
+上面用到了`__bridge_retained`关键字,它的意思是ARC将anNSArray对象的内存管理权限全部交出,所以我们要自己管理该对象的内存.记得最后调用CFRelease(anCFArray);
