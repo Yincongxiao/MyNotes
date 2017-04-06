@@ -160,6 +160,18 @@ SonClass *son = [SonClass new];
 [son eat];
 输出台:
 //+[FatherClass initialize],FatherClass
-//+[SonClass initialize],SonClass
-
+//+[FatherClass initialize],SonClass
+```
+我们发现子类如果实现了就走子类的方法,子类没有实现就走父类的方法.这与普通的方法是相同的,都遵循集成规则,这个与+load不同.
+那我们如果不想因为子类而调用到父类的方法该怎么办呢?
+```c
+@implementation FatherClass
++ (void)initialize {
+    if (self == [FatherClass class]) {
+        NSLog(@"%s,%@",__func__,self);
+    }
+}
+@end
+输出台
+//+[FatherClass initialize],FatherClass
 ```
