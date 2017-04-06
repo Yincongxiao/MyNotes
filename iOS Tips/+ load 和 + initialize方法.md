@@ -175,3 +175,8 @@ SonClass *son = [SonClass new];
 输出台
 //+[FatherClass initialize],FatherClass
 ```
+#####+load与+initalize方法的区别
+* +initalize 是惰性调用,只有当给该类或者该类的派生类被使用时才会被调用.
+* +load方法,应用会阻塞并等待所有类的+load执行完才会继续执行.
+* +initalize方法是线程安全的.所以不用担心对该类第一次发消息的线程问题.
+
