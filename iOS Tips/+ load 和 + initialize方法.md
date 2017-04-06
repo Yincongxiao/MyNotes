@@ -121,3 +121,45 @@ SonClass *son = [SonClass new];
 ####+initialize
 #####调用时机
 对于每个类来说,该方法会在程序第一次使用该类或者该类的子类时被调用,并且只会调用一次.如果子类没有实现,那么会调用父类的该方法
+
+```c
+//子类实现
+@implementation FatherClass
++ (void)initialize {
+    NSLog(@"%s,%@",__func__,self);
+}
+- (void)eat {
+     NSLog(@"%s,%@",__func__,self);
+}
+@end
+@implementation SonClass
++ (void)initialize {
+    NSLog(@"%s,%@",__func__,self);
+}
+@end
+
+SonClass *son = [SonClass new];
+[son eat];
+输出台:
+//+[FatherClass initialize],FatherClass
+//+[SonClass initialize],SonClass
+
+//子类不实现
+@implementation FatherClass
++ (void)initialize {
+    NSLog(@"%s,%@",__func__,self);
+}
+- (void)eat {
+     NSLog(@"%s,%@",__func__,self);
+}
+@end
+@implementation SonClass
+@end
+
+SonClass *son = [SonClass new];
+[son eat];
+输出台:
+//+[FatherClass initialize],FatherClass
+//+[SonClass initialize],SonClass
+
+```
