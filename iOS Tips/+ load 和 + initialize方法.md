@@ -22,6 +22,22 @@
 +[FatherClass load]
 +[SonClass load]
 ```
+如果分类中也实现了该方法,那么先调用本类的再调用分类的
+```c
+@implementation FatherClass
++(void)load {
+     NSLog(@"%s,%@",__func__,self);
+}
+@end
+@implementation FatherClass (category)
++(void)load {
+    NSLog(@"%s,%@",__func__,self);
+}
+@end
+输出台:
+//+[FatherClass load],FatherClass
+//+[FatherClass(category) load],FatherClass
+```
 如果两个没有继承关系的类都实现了+load方法,那么它的调用顺序取决于谁先被加到运行期环境中
 ![](/assets/屏幕快照 2017-04-06 上午9.13.34.png)
 上图中的AnyObject类与FatherClass类都继承自NSObject,但是FatherClass先被加入进运行期环境,所以它的+load方法会先被执行.
