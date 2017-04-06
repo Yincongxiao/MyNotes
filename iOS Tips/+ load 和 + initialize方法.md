@@ -43,10 +43,37 @@
 @end
 ```
 当然AnyObject这个类使我们自己写的,我们可能通过Complie Sources知道它加载的顺序(这不是一个好办法),但是是用其他类库我们就不得而知.如果恰好在AnyObject中使用了+load方法来进行某些初始化操作来赋予这个类某些特性,并且这个类被载入的晚,那么这就有问题了.
-* + **load方法不像普通的方法那样遵循继承规则**,如果一个类本身没有实现+load方法,那么无论其各级超类是否实现此方法系统都不会调动.这句话应该这样理解:正常我们给一个对象或者类发消息,如果这个对象(或类)本身没有实现该方法,那么系统会通过isa指针找到父类的实现.但是+load方法不同,子类如果没有实现该方法那么也不会去父类中找.也就是说你实现了系统就调用,你没实现就算了.但是如果在+load中显式的调用[super load];那么就会去调用父类方法了.
+* **+load方法不像普通的方法那样遵循继承规则**,如果一个类本身没有实现+load方法,那么无论其各级超类是否实现此方法系统都不会调动.这句话应该这样理解:正常我们给一个对象或者类发消息,如果这个对象(或类)本身没有实现该方法,那么系统会通过isa指针找到父类的实现.但是+load方法不同,子类如果没有实现该方法那么也不会去父类中找.也就是说你实现了系统就调用,你没实现就算了.但是如果在+load中显式的调用[super load];那么就会去调用父类方法了.
 
 ```c
-//普通方法
+//普通方法,子类实现
+@implementation FatherClass
+- (void)eat {
+     NSLog(@"%s,%@",__func__,self);
+}
+@end
+@implementation SonClass
+- (void)eat {
+  NSLog(@"%s,%@",__func__,self);
+}
+@end
+SonClass *son = [SonClass new];
+[son eat];
+输出台:
+//-[SonClass eat],<SonClass: 0x600000017970>
+
+//子类未实现
+@implementation FatherClass
+- (void)eat {
+     NSLog(@"%s,%@",__func__,self);
+}
+@en
+@implementation SonClass
+@end
+SonClass *son = [SonClass new];
+[son eat];
+输出台:
+//-[FatherClass eat],<SonClass: 0x600000001600>
 
 //+load方法
 ```
