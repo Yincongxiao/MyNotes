@@ -75,5 +75,30 @@ SonClass *son = [SonClass new];
 输出台:
 //-[FatherClass eat],<SonClass: 0x600000001600>
 
-//+load方法
+//+load方法,子类实现
+@implementation FatherClass
++(void)load {
+     NSLog(@"%s,%@",__func__,self);
+}
+@end
+@implementation SonClass
++(void)load {
+    NSLog(@"%s,%@",__func__,self);
+
+@end
+输出台:
+//+[FatherClass load],FatherClass
+//+[SonClass load],SonClass
+
+//子类未实现
+@implementation FatherClass
++(void)load {
+     NSLog(@"%s,%@",__func__,self);
+}
+@end
+@implementation SonClass
+@end
+输出台:
+//+[FatherClass load],FatherClass
+
 ```
