@@ -1,8 +1,8 @@
 ####面试中常见问题汇总
 #####网络方面
- * http协议的三次握手过程,https协议的原理
+ * http协议的三次握手过程,https协议的原理,ssl.tsl
  * iOS中NSURLConnection和NSURLSession的使用,如何设置cookie以及缓存策略
- * 是否自定义过NSURLProtol来控制请求缓存
+ * 是否自定义过NSURLProtol,NSURLCache来控制请求缓存
  
 #####UI方面
  * 有没有使用过CoreAnimation先关类进行过优美的动画
@@ -10,6 +10,7 @@
  
 #####数据存储
  * 你知道几种数据存储方式,分别是?使用场景
+ * 如何对sqlite数据库进行增量升级.
  
 #####语言方面
 #####iOS知识
@@ -29,4 +30,4 @@
 * 都有读过哪些开源源码,简单介绍一个自己比较熟悉的框架原理.
 * runloop的一下原理,runloop与线程的关系,runloop的应用场景.
 * 手写一段单例代码.
-* 
+* 平时是如何进行提升的.
