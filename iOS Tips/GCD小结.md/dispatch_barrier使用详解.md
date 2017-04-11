@@ -25,3 +25,27 @@ download task 0 successed!
 barrier blcok success!
 upload task successed!
 ```
+* 假如queue是global queue
+```c
+dispatch_queue_t globalQueue = dispatch_get_global_queue(0, DISPATCH_QUEUE_PRIORITY_DEFAULT);
+    for (int i = 0; i < 3; i ++) {
+        dispatch_async(globalQueue, ^{
+            [NSThread sleepForTimeInterval:1.0];
+            NSLog(@"download task %d successed!",i);
+        });
+    }
+    dispatch_barrier_async(globalQueue, ^{
+        [NSThread sleepForTimeInterval:2.0];
+        NSLog(@"barrier blcok success!");
+    });
+    dispatch_async(globalQueue, ^{
+        [NSThread sleepForTimeInterval:1.0];
+        NSLog(@"upload task successed!");
+    });
+    //输出台:
+download task 1 successed!
+download task 0 successed!
+download task 2 successed!
+upload task successed!
+barrier blcok success!
+```
