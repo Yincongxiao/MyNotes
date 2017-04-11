@@ -32,3 +32,24 @@ void dispatch_group_async_f(dispatch_group_t group,dispatch_queue_t queue,void *
  //指定一个任务完成了.只能和`dispatch_group_enter`配对使用.
  void dispatch_group_leave(dispatch_group_t group);
  ```
+ 
+ #####使用案例
+ ######dispatch_group_async
+ ```c
+ dispatch_queue_t serialQueue = dispatch_queue_create("com.GCDDemo.queue",DISPATCH_QUEUE_CONCURRENT);
+    dispatch_group_t group = dispatch_group_create();
+    
+    dispatch_group_async(group, serialQueue, ^{
+        [NSThread sleepForTimeInterval:2.0];
+        NSLog(@"first download task success! %@",[NSThread currentThread]);
+    });
+    
+    dispatch_group_async(group, serialQueue, ^{
+        [NSThread sleepForTimeInterval:1.0];
+        NSLog(@"second download task success! %@",[NSThread currentThread]);
+    });
+    
+    dispatch_group_notify(group, serialQueue, ^{
+        NSLog(@"begin task three! %@",[NSThread currentThread]);
+    });
+ ```
