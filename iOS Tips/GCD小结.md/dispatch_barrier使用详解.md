@@ -18,4 +18,10 @@ dispatch_queue_t concurrentQueue = dispatch_queue_create("com.GCDDemo.concurrent
         [NSThread sleepForTimeInterval:1.0];
         NSLog(@"upload task successed!");
     });
+    //输出台:
+download task 2 successed!
+download task 1 successed!
+download task 0 successed!
+barrier blcok success!
+upload task successed!
 ```
