@@ -85,6 +85,7 @@ dispatch_queue_t concurrentQueue = dispatch_queue_create("com.GCDDemo.concurrent
         dispatch_group_leave(group);
     });
     
+    //超时处理.
     long result = dispatch_group_wait(group, dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC));
     if (result == 0) {
         NSLog(@"success");
@@ -95,4 +96,11 @@ dispatch_queue_t concurrentQueue = dispatch_queue_create("com.GCDDemo.concurrent
     dispatch_group_notify(group, concurrentQueue, ^{
         NSLog(@"begin task three! %@",[NSThread currentThread]);
     });
+//输出台:
+time out!
+ first download task success! <NSThread: 0x608000277200>{number = 4, name = (null)}
+second download task success! <NSThread: 0x608000270c40>{number = 3, name = (null)}
+ three download task success! <NSThread: 0x608000270c40>{number = 3, name = (null)}
+begin task three! <NSThread: 0x608000277200>{number = 4, name = (null)}
+注意我的任务1放在了并发队列中,任务2,和任务3放在了串行队列中,所以你看到的打印顺序是任务1和任务2几乎同时打印,任务3等2秒后打印,(在任务2之后).
 ```
