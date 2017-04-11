@@ -36,20 +36,25 @@ void dispatch_group_async_f(dispatch_group_t group,dispatch_queue_t queue,void *
  #####使用案例
  ######dispatch_group_async
  ```c
- dispatch_queue_t serialQueue = dispatch_queue_create("com.GCDDemo.queue",DISPATCH_QUEUE_CONCURRENT);
+ dispatch_queue_t concurrentQueue = dispatch_queue_create("com.GCDDemo.queue",DISPATCH_QUEUE_CONCURRENT);
     dispatch_group_t group = dispatch_group_create();
     
-    dispatch_group_async(group, serialQueue, ^{
+    dispatch_group_async(group, concurrentQueue, ^{
         [NSThread sleepForTimeInterval:2.0];
         NSLog(@"first download task success! %@",[NSThread currentThread]);
     });
     
-    dispatch_group_async(group, serialQueue, ^{
+    dispatch_group_async(group, concurrentQueue, ^{
         [NSThread sleepForTimeInterval:1.0];
         NSLog(@"second download task success! %@",[NSThread currentThread]);
     });
     
-    dispatch_group_notify(group, serialQueue, ^{
+    dispatch_group_notify(group, concurrentQueue, ^{
         NSLog(@"begin task three! %@",[NSThread currentThread]);
     });
+    输出台:
+   second download task success! <NSThread: 0x600000279c80>{number = 4, name = (null)}
+ first download task success! <NSThread: 0x6080002674c0>{number = 3, name = (null)}
+begin task three! <NSThread: 0x6080002674c0>{number = 3, name = (null)}
+
  ```
