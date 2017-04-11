@@ -3,7 +3,7 @@
 
 #####我们先来看group中的api
  * dispatch_group_async
-  
+      
  ```c
  //将block(任务)提交到指定的队列中,并且将次任务放到(关联)指定的group,block将异步执行.
  void dispatch_group_async(dispatch_group_t group,dispatch_queue_t queue,dispatch_block_t block);		
