@@ -58,6 +58,7 @@ void dispatch_group_async_f(dispatch_group_t group,dispatch_queue_t queue,void *
 begin task three! <NSThread: 0x6080002674c0>{number = 3, name = (null)}
  ```
  #####dispatch_group_enter & dispatch_group_leave
+ * 个人感觉这种方式比`dispatch_group_async`更加灵活.比如我们可以在任务的完成回调里面写dispatch_group_leave().
 ```c
 dispatch_queue_t concurrentQueue = dispatch_queue_create("com.GCDDemo.concurrentQueue",DISPATCH_QUEUE_CONCURRENT);
     dispatch_queue_t serialQueue = dispatch_queue_create("com.GCDDemo.serialQueue", DISPATCH_QUEUE_SERIAL);
